@@ -19,11 +19,12 @@
     "eslint": "8.29.0",
     "eslint-config-next": "13.0.6",
     "firebase": "^9.15.0",
-    "prettier": "2.7.1",
     "next": "13.0.6",
+    "prettier": "2.7.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "4.9.4"
+    "typescript": "4.9.4",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.5.0",
