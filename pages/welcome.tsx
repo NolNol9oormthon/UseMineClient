@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import axios from 'axios';
 import qs from 'qs';
-import { useNavigate } from 'react-router-dom';
 import Image from 'next/image';
 import { ChevronRightBlue, ChevronRightOrange } from '../assets/icons';
 import animation from '../assets/lottie/airplane_loading.json';
@@ -94,7 +93,6 @@ const Home: NextPage = () => {
   const [userInfo, setUserInfo] = useState({});
   // const [code, setCode] = useState('');
   const router = useRouter();
-  // const history = useNavigate();
 
   useEffect(() => {
     console.log(router.query['code']);
