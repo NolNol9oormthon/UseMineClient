@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     width: 100%;
     height: 100%;
+    font-family: NanumSquare Neo variable;
   }
   
   #root {
@@ -19,12 +20,14 @@ const GlobalStyle = createGlobalStyle`
   }
   
   * {
-    box-sizing: border-box;
-  }
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
   
   body, button {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
-    Helvetica Neue, sans-serif;
+    Helvetica Neue, sans-serif, NanumSquare Neo variable;
   }
   
   button {
@@ -33,11 +36,17 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
     background-color: transparent;
     -webkit-tap-highlight-color : transparent;
+    font-family: NanumSquare Neo variable;
   }
   
   a, a:visited {
     text-decoration: none;
     color: black;
+    font-family: NanumSquare Neo variable;
+  }
+
+  div {
+    font-family: NanumSquare Neo variable;
   }
 `;
 
