@@ -1,6 +1,8 @@
 import GlobalStyle from '../src/styles/globalStyle';
 import type { AppProps } from 'next/app';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import { theme } from '../src/styles/theme';
+import "../src/font/font.css";
 
 const BodyInner = styled.div`
   display: flex;
@@ -8,27 +10,30 @@ const BodyInner = styled.div`
   justify-content: center;
   // align-items: center;
   min-height: 100vh;
-  background-color: #000000;
+  background-color: ${props => props.theme.colors.gray100};
 `;
 
 const WebAppContainer = styled.div`
   width: 100%;
-  max-width: 375px;
+  max-width: 420px;
   height: 100%;
   min-height: 100vh;
-  background-color: #ffffff;
+  padding: 0px 20px;
+  background-color: ${props => props.theme.colors.white};
   // position: absolute;
 `;
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
-      <GlobalStyle />
-      <BodyInner>
-        <WebAppContainer>
-          <Component {...pageProps} />
-        </WebAppContainer>
-      </BodyInner>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <BodyInner>
+          <WebAppContainer>
+            <Component {...pageProps} />
+          </WebAppContainer>
+        </BodyInner>
+      </ThemeProvider>
     </>
   );
 };

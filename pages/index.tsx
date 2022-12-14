@@ -3,6 +3,9 @@ import styled from "styled-components";
 
 const Container = styled.div`
   height: 100%;
+  font-family: NanumSquare Neo variable;
+  font-size: 30px;
+  font-weight: 700;
 `
 
 const Home: NextPage = () => {
