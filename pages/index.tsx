@@ -36,7 +36,20 @@ const LoginButton = styled.button`
 
 
 const Home: NextPage = () => {
-  const REDIRCT_URI = "http://localhost:3000/welcome"
+  let currentUrl = ""
+  try {
+    if (!window) {
+      currentUrl = "http://localhost:3000"
+    } else {
+      currentUrl = window.location.origin
+      // currentUrl = "https://usemine-6a464.web.app"
+    }
+  } catch {
+    currentUrl = "http://localhost:3000"
+  }
+  
+  const REDIRCT_URI = `${currentUrl}/welcome`
+  // const REDIRCT_URI = "https://usemine-6a464.web.app/welcome"
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${REDIRCT_URI}&response_type=code`;
 
   const handleLogin = () => {

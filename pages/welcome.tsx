@@ -5,9 +5,10 @@ import styled from 'styled-components';
 import axios from 'axios';
 import qs from 'qs';
 import Image from 'next/image';
+import Lottie from 'react-lottie';
+
 import { ChevronRightBlue, ChevronRightOrange } from '../assets/icons';
 import animation from '../assets/lottie/airplane_loading.json';
-import Lottie from 'reactjs-lottie';
 
 const Container = styled.div`
   width: 100%;
@@ -87,16 +88,32 @@ const LottieContainer = styled.div`
   justify-content: center;
   width: 100%;
   padding-top: 100px;
-`
+`;
 
 const Home: NextPage = () => {
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({
+    id: "",
+    nickname: ""
+  });
   // const [code, setCode] = useState('');
+  // let currentUrl = getAbsoluteURL().origin
   const router = useRouter();
+  console.log(router);
+  let currentUrl = '';
+  try {
+    if (!window) {
+      currentUrl = "http://localhost:3000"
+    } else {
+      currentUrl = window.location.origin
+      // currentUrl = "https://usemine-6a464.web.app"
+    }
+  } catch {
+    currentUrl = 'http://localhost:3000';
+  }
 
   useEffect(() => {
     console.log(router.query['code']);
-    var code = router.query['code'];
+    let code = router.query['code'];
 
     const getProfile = async () => {
       try {
@@ -130,7 +147,8 @@ const Home: NextPage = () => {
       const payload = qs.stringify({
         grant_type: 'authorization_code',
         client_id: process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY,
-        redirect_uri: 'http://localhost:3000/welcome',
+        redirect_uri: `${currentUrl}/welcome`,
+        // redirect_uri: 'https://usemine-6a464.web.app/welcome',
         code: code,
         client_secret: process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET,
       });

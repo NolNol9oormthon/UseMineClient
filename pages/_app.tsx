@@ -1,10 +1,11 @@
-import GlobalStyle from '../src/styles/globalStyle';
+import Script from 'next/script';
+import styled, { ThemeProvider } from 'styled-components';
+import '../src/font/font.css';
 import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
-import styled, { ThemeProvider } from 'styled-components';
+
+import GlobalStyle from '../src/styles/globalStyle';
 import { theme } from '../src/styles/theme';
-import '../src/font/font.css';
-import Script from 'next/script';
 
 
 const BodyInner = styled.div`
