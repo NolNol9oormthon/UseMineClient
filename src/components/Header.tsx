@@ -2,7 +2,8 @@ import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
 
-import { ChevronLeftBlack, UserProfileOutline } from '../../assets/icons';
+import ChevronLeftBlack from '../../assets/icons/chevron-left-black.svg';
+import UserProfileOutline from '../../assets/icons/user-profile-outline.svg';
 
 const Container = styled.div`
   width: 100%;
@@ -25,9 +26,9 @@ const Title = styled.span`
 const Header = ({ headerTitle }: { headerTitle: string }) => {
   return (
     <Container>
-      <Image src={ChevronLeftBlack} alt="" />
+      <ChevronLeftBlack />
       <Title>{headerTitle}</Title>
-      <Image src={UserProfileOutline} alt="" />
+      <UserProfileOutline />
     </Container>
   );
 };
