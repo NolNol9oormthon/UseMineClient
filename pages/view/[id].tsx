@@ -107,10 +107,10 @@ const AbaliableTimeText = styled.span`
 const ButtonWhiteBackground = styled.div<{ windowWidth: number }>`
   position: fixed;
   bottom: 0px;
-  padding-bottom: 40px;
   width: ${({ windowWidth }) => (windowWidth > 420 ? '380px' : `calc(100% - 20px)`)};
-  transform: ${({ windowWidth }) => (windowWidth > 420 ? `translateX(calc(50% + 100px))` : null)};
-  left: 20px;
+  left: ${({ windowWidth }) => (windowWidth > 420 ? `calc(50% - 210px)` : 0)};
+  padding: 0 20px;
+  padding-bottom: 40px;
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
@@ -147,7 +147,7 @@ const Detail = () => {
       getDetailData(Number(id)).then((res) => setData(res));
     };
     get();
-  });
+  }, [id]);
 
   return (
     <Container>

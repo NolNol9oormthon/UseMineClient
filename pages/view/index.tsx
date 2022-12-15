@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import Header from '../../src/components/Header';
 import Item, { ItemState } from '../../src/components/Item';
@@ -14,40 +15,41 @@ import Ticket from '../../assets/icons/ticket_orange.svg';
 import Souvenir from '../../assets/icons/souvenir_orange.svg';
 import Etc from '../../assets/icons/etc_orange.svg';
 import { getAllData } from '../../src/apis';
+import useObserver from '../../src/hooks/useObserver';
 
 const mockCategories = [
   {
-    category_id: 0,
+    category_id: 'all',
     category_name: '모든 물품',
     component: () => <All />,
   },
   {
-    category_id: 1,
+    category_id: 'food',
     category_name: '식품',
     component: () => <Food />,
   },
   {
-    category_id: 2,
+    category_id: 'clothes',
     category_name: '의류',
     component: () => <Clothes />,
   },
   {
-    category_id: 3,
+    category_id: 'necessities',
     category_name: '생활용품',
     component: () => <Necessities />,
   },
   {
-    category_id: 4,
+    category_id: 'ticket',
     category_name: '할인권',
     component: () => <Ticket />,
   },
   {
-    category_id: 5,
+    category_id: 'souvenir',
     category_name: '기념품',
     component: () => <Souvenir />,
   },
   {
-    category_id: 6,
+    category_id: 'etc',
     category_name: '기타',
     component: () => <Etc />,
   },
@@ -148,27 +150,31 @@ export interface ItemProps {
 }
 
 const View: NextPage = () => {
-  const [clickedCategoryChip, setClickedCategoryChip] = useState<number>(0);
+  const [clickedCategoryChip, setClickedCategoryChip] = useState<string>('all');
 
-  const [data, setData] = useState<ItemProps[]>([]);
+  const { data, fetchNextPage, hasNextPage, status } = useInfiniteQuery(
+    ['infiniteDatas', clickedCategoryChip],
+    ({ pageParam = 0 }) => getAllData(clickedCategoryChip, pageParam),
+    {
+      getNextPageParam: (lastPage) => {
+        return lastPage[lastPage.length - 1]?.itemId;
+      },
+    },
+  );
 
-  const handelCategoryChipClick = (catogoryId: number) => {
-    setClickedCategoryChip(catogoryId);
+  const onIntersect: IntersectionObserverCallback = ([entry]) => {
+    entry.isIntersecting && fetchNextPage();
   };
 
-  useEffect(() => {
-    const get = async () => {
-      getAllData().then((res) => setData(res));
-    };
-    get();
-  }, []);
+  const { setTarget } = useObserver({ onIntersect });
 
-  console.log(data);
+  const handelCategoryChipClick = (catogoryId: string) => {
+    setClickedCategoryChip(catogoryId);
+  };
 
   return (
     <Container>
       <Header headerTitle="나눔목록" />
-
       <CategoryContainer>
         <CategoryList>
           {mockCategories.map((category) => (
@@ -186,17 +192,22 @@ const View: NextPage = () => {
           ))}
         </CategoryList>
       </CategoryContainer>
-
       <ItemList>
-        {data.map((item) => (
-          <LinkWrapper
-            href={`/view/${item.itemId}`}
-            isDisabled={item.state === ItemState.COMPLETE}
-            key={item.itemId}
-          >
-            <Item {...item} />
-          </LinkWrapper>
-        ))}
+        <>
+          {status === 'success' &&
+            data.pages.map((page) => {
+              return page.map((item: ItemProps) => (
+                <LinkWrapper
+                  href={`/view/${item.itemId}`}
+                  isDisabled={item.state === ItemState.COMPLETE}
+                  key={item.itemId}
+                >
+                  <Item {...item} />
+                </LinkWrapper>
+              ));
+            })}
+        </>
+        <div ref={setTarget}></div>
       </ItemList>
     </Container>
   );
