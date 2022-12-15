@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import Link from 'next/link';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -132,10 +131,11 @@ const mockItems = [
 
 const Container = styled.div`
   position: relative;
+  width: 100%;
+  height: 100%;
 `;
 
-const CategoryContainer = styled.div`
-  width: 100%;
+const CategoryContainer = styled.div<{ isVisible: boolean }>`
   margin: 0 -20px;
   position: absolute;
   overflow-x: scroll;
@@ -144,6 +144,7 @@ const CategoryContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
 `;
 
 const CategoryList = styled.div`
@@ -172,13 +173,13 @@ const CategoryChip = styled.button<{ isClicked: boolean }>`
 `;
 
 const ItemList = styled.div`
-  margin-top: 72px;
   display: flex;
+  margin-top: 56px;
   flex-direction: column;
   gap: 16px;
-  padding: 16px 0;
+  padding: 80px 0;
   height: 100%;
-  max-height: calc(100vh - 128px);
+  max-height: calc(100vh - 72px);
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
@@ -204,11 +205,12 @@ const View: NextPage = () => {
     setClickedCategoryChip(catogoryId);
   };
 
+  const [isVisible, setIsVisible] = useState(true);
+
   return (
     <Container>
       <Header headerTitle="나눔목록" />
-
-      <CategoryContainer>
+      <CategoryContainer isVisible={isVisible}>
         <CategoryList>
           {mockCategories.map((category, index) => (
             <CategoryChip
@@ -223,7 +225,11 @@ const View: NextPage = () => {
           ))}
         </CategoryList>
       </CategoryContainer>
-      <ItemList>
+      <ItemList
+        onWheel={(e) => {
+          setIsVisible(e.deltaY < 0);
+        }}
+      >
         {mockItems.map((item) => (
           <LinkWrapper
             href={`/view/${item.id}`}
