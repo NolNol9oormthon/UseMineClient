@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import Header from '../../src/components/Header';
@@ -8,11 +8,12 @@ import LinkWrapper from '../../src/components/LinkWrapper';
 import Check from '../../assets/icons/check.svg';
 import All from '../../assets/icons/all.svg';
 import Food from '../../assets/icons/food.svg';
-import Apparel from '../../assets/icons/apparel.svg';
-import Life from '../../assets/icons/life.svg';
+import Clothes from '../../assets/icons/clothes.svg';
+import Necessities from '../../assets/icons/necessities.svg';
 import Ticket from '../../assets/icons/ticket.svg';
 import Souvenir from '../../assets/icons/souvenir.svg';
 import Etc from '../../assets/icons/etc.svg';
+import { getAllData } from '../../src/apis';
 
 const mockCategories = [
   {
@@ -28,16 +29,16 @@ const mockCategories = [
   {
     category_id: 2,
     category_name: '의류',
-    component: () => <Apparel />,
+    component: () => <Clothes />,
   },
   {
     category_id: 3,
     category_name: '생활용품',
-    component: () => <Life />,
+    component: () => <Necessities />,
   },
   {
     category_id: 4,
-    category_name: '티켓',
+    category_name: '할인권',
     component: () => <Ticket />,
   },
   {
@@ -236,24 +237,34 @@ const ItemList = styled.div`
 `;
 
 export interface ItemProps {
-  id: string;
-  writer_id: string;
-  writer_nickname: string;
-  item_name: string;
-  category_id: string;
-  item_image: string;
-  state_id: string;
-  avaliable_start_time: string;
-  avaliable_end_time: string;
+  itemId: number;
+  ownerId: string;
+  ownerNickname: string;
+  itemName: string;
+  category: string;
+  imageUrl: string;
+  state: string;
+  availableStartTime: string;
+  availableEndTime: string;
 }
 
 const View: NextPage = () => {
   const [clickedCategoryChip, setClickedCategoryChip] = useState<number>(0);
   const [isVisible, setIsVisible] = useState(true);
+  const [data, setData] = useState<ItemProps[]>([]);
 
   const handelCategoryChipClick = (catogoryId: number) => {
     setClickedCategoryChip(catogoryId);
   };
+
+  useEffect(() => {
+    const get = async () => {
+      getAllData().then((res) => setData(res));
+    };
+    get();
+  }, []);
+
+  console.log(data);
 
   return (
     <Container>
@@ -281,11 +292,11 @@ const View: NextPage = () => {
           }
         }}
       >
-        {mockItems.map((item) => (
+        {data.map((item) => (
           <LinkWrapper
-            href={`/view/${item.id}`}
-            isDisabled={item.state_id === ItemState.COMPLETE}
-            key={item.id}
+            href={`/view/${item.itemId}`}
+            isDisabled={item.state === ItemState.COMPLETE}
+            key={item.itemId}
           >
             <Item {...item} />
           </LinkWrapper>
