@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import axios from 'axios';
 import qs from 'qs';
-import Image from 'next/image';
-import Lottie from 'react-lottie';
 
 import ChevronRightBlue from '../assets/icons/chevron-right-blue.svg';
 import ChevronRightOrange from '../assets/icons/chevron-right-orange.svg';
-import animation from '../assets/lottie/airplane_loading.json';
 
 const Container = styled.div`
   width: 100%;
@@ -99,6 +96,11 @@ const Home: NextPage = () => {
   // const [code, setCode] = useState('');
   // let currentUrl = getAbsoluteURL().origin
   const router = useRouter();
+  const ref = useRef(null);
+  React.useEffect(() => {
+    import('@lottiefiles/lottie-player');
+  });
+
   console.log(router);
   let currentUrl = '';
   try {
@@ -196,12 +198,15 @@ const Home: NextPage = () => {
         </>
       ) : (
         <LottieContainer>
-          <Lottie
-            options={{
-              animationData: animation,
-              loop: true,
-            }}
-          />
+          <lottie-player
+            id="firstLottie"
+            ref={ref}
+            autoplay
+            loop
+            mode="normal"
+            src="https://lottie.host/2714ac92-2f14-465f-842b-c63e9d0f858f/uoVSKxFYSM.json"
+            style={{ width: '200px', height: '200px' }}
+          ></lottie-player>
         </LottieContainer>
       )}
     </Container>
