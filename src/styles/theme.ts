@@ -18,13 +18,18 @@ const colors = {
   tam_blue300: '#97A1FF',
   tam_blue200: '#CED3FF',
   tam_blue100: '#DBDFFF',
+  tam_blue50: '#F9F9FF',
   tam_Orange500: '#FF820F',
   tam_Orange400: '#FF932F',
   tam_Orange300: '#FFAA5C',
   tam_Orange200: '#FEC58F',
   tam_Orange100: '#FEDFC2',
+  tam_Orange50: '#FFF8F6',
   kakao_yellow: '#FFED4D',
   kakao_black: '#181600',
+  red_300: '#FD4444',
+  red_200: '#FF9F9F',
+  red_100: '#FFF6F6',
 };
 
 export type ColorsTypes = typeof colors;
