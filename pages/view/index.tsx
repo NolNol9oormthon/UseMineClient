@@ -1,9 +1,11 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import Header from '../../src/components/Header';
-import Item from '../../src/components/Item';
+import Item, { ItemState } from '../../src/components/Item';
+import LinkWrapper from '../../src/components/LinkWrapper';
 
 const mockCategories = [
   { category_id: 0, category_name: '모든\n물품' },
@@ -12,6 +14,8 @@ const mockCategories = [
   { category_id: 3, category_name: '절권도' },
   { category_id: 4, category_name: '태권도' },
   { category_id: 5, category_name: '너도나도' },
+  { category_id: 6, category_name: '도도새' },
+  { category_id: 7, category_name: '김치' },
 ];
 const mockItems = [
   {
@@ -47,12 +51,106 @@ const mockItems = [
     avaliable_start_time: '12시 00분',
     avaliable_end_time: '13시 00분',
   },
+  {
+    id: 4,
+    writer_id: 333,
+    writer_nickname: '파란 감귤',
+    category_id: 3,
+    item_name: '귤모자',
+    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
+    state_id: 'COMPLETE',
+    avaliable_start_time: '12시 00분',
+    avaliable_end_time: '13시 00분',
+  },
+  {
+    id: 5,
+    writer_id: 333,
+    writer_nickname: '파란 감귤',
+    category_id: 3,
+    item_name: '귤모자',
+    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
+    state_id: 'COMPLETE',
+    avaliable_start_time: '12시 00분',
+    avaliable_end_time: '13시 00분',
+  },
+  {
+    id: 6,
+    writer_id: 333,
+    writer_nickname: '파란 감귤',
+    category_id: 3,
+    item_name: '귤모자',
+    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
+    state_id: 'COMPLETE',
+    avaliable_start_time: '12시 00분',
+    avaliable_end_time: '13시 00분',
+  },
+  {
+    id: 7,
+    writer_id: 333,
+    writer_nickname: '파란 감귤',
+    category_id: 3,
+    item_name: '귤모자',
+    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
+    state_id: 'COMPLETE',
+    avaliable_start_time: '12시 00분',
+    avaliable_end_time: '13시 00분',
+  },
+  {
+    id: 8,
+    writer_id: 333,
+    writer_nickname: '파란 감귤',
+    category_id: 3,
+    item_name: '귤모자',
+    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
+    state_id: 'COMPLETE',
+    avaliable_start_time: '12시 00분',
+    avaliable_end_time: '13시 00분',
+  },
+  {
+    id: 9,
+    writer_id: 333,
+    writer_nickname: '파란 감귤',
+    category_id: 3,
+    item_name: '귤모자',
+    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
+    state_id: 'COMPLETE',
+    avaliable_start_time: '12시 00분',
+    avaliable_end_time: '13시 00분',
+  },
+  {
+    id: 10,
+    writer_id: 333,
+    writer_nickname: '파란 감귤',
+    category_id: 3,
+    item_name: '귤모자',
+    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
+    state_id: 'COMPLETE',
+    avaliable_start_time: '12시 00분',
+    avaliable_end_time: '13시 00분',
+  },
 ];
+
+const Container = styled.div`
+  position: relative;
+`;
+
+const CategoryContainer = styled.div`
+  width: 100%;
+  margin: 0 -20px;
+  position: absolute;
+  overflow-x: scroll;
+  padding: 0 20px;
+  width: calc(100% + 40px);
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const CategoryList = styled.div`
   display: flex;
   gap: 8px;
-  margin: 8px 0;
+  padding: 8px 0;
+  width: fit-content;
 `;
 
 const CategoryChip = styled.button<{ isClicked: boolean }>`
@@ -74,10 +172,17 @@ const CategoryChip = styled.button<{ isClicked: boolean }>`
 `;
 
 const ItemList = styled.div`
+  margin-top: 72px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 16px 0;
+  height: 100%;
+  max-height: calc(100vh - 128px);
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export interface ItemProps {
@@ -100,27 +205,36 @@ const View: NextPage = () => {
   };
 
   return (
-    <>
+    <Container>
       <Header headerTitle="나눔목록" />
-      <CategoryList>
-        {mockCategories.map((category, index) => (
-          <CategoryChip
-            key={index}
-            onClick={() => {
-              handelCategoryChipClick(category.category_id);
-            }}
-            isClicked={clickedCategoryChip === category.category_id}
-          >
-            {category.category_name}
-          </CategoryChip>
-        ))}
-      </CategoryList>
+
+      <CategoryContainer>
+        <CategoryList>
+          {mockCategories.map((category, index) => (
+            <CategoryChip
+              key={index}
+              onClick={() => {
+                handelCategoryChipClick(category.category_id);
+              }}
+              isClicked={clickedCategoryChip === category.category_id}
+            >
+              {category.category_name}
+            </CategoryChip>
+          ))}
+        </CategoryList>
+      </CategoryContainer>
       <ItemList>
         {mockItems.map((item) => (
-          <Item key={item.id} {...item} />
+          <LinkWrapper
+            href={`/view/${item.id}`}
+            isDisabled={item.state_id === ItemState.COMPLETE}
+            key={item.id}
+          >
+            <Item {...item} />
+          </LinkWrapper>
         ))}
       </ItemList>
-    </>
+    </Container>
   );
 };
 
