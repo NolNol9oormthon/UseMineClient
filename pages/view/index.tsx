@@ -53,119 +53,6 @@ const mockCategories = [
   },
 ];
 
-const mockItems = [
-  {
-    id: 1,
-    writer_id: 111,
-    writer_nickname: '파란 감귤',
-    item_name: '귤모자',
-    category_id: 1,
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'AVAILABLE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 2,
-    writer_id: 222,
-    writer_nickname: '노란 돌하르방',
-    category_id: 1,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'RESERVED',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 3,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 4,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 5,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 6,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 7,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 8,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 9,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 10,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-];
-
 const Container = styled.div`
   position: relative;
   width: 100%;
@@ -173,7 +60,7 @@ const Container = styled.div`
   display: flex;
 `;
 
-const CategoryContainer = styled.div<{ isVisible: boolean }>`
+const CategoryContainer = styled.div`
   margin: 0 -20px;
   position: absolute;
   overflow-x: scroll;
@@ -182,7 +69,7 @@ const CategoryContainer = styled.div<{ isVisible: boolean }>`
   ::-webkit-scrollbar {
     display: none;
   }
-  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 const CategoryList = styled.div`
@@ -195,6 +82,9 @@ const CategoryList = styled.div`
 
 const ChipWrapper = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const StyledCheck = styled(Check)`
@@ -220,6 +110,14 @@ const CategoryChip = styled.button`
   font-size: 12px;
   line-height: 14px;
   z-index: 1;
+`;
+
+const CategoryName = styled.span`
+  margin-top: 8px;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 14px;
+  color: ${({ theme }) => theme.colors.gray500};
 `;
 
 const ItemList = styled.div`
@@ -250,7 +148,7 @@ export interface ItemProps {
 
 const View: NextPage = () => {
   const [clickedCategoryChip, setClickedCategoryChip] = useState<number>(0);
-  const [isVisible, setIsVisible] = useState(true);
+
   const [data, setData] = useState<ItemProps[]>([]);
 
   const handelCategoryChipClick = (catogoryId: number) => {
@@ -269,7 +167,7 @@ const View: NextPage = () => {
   return (
     <Container>
       <Header headerTitle="나눔목록" />
-      <CategoryContainer isVisible={isVisible}>
+      <CategoryContainer>
         <CategoryList>
           {mockCategories.map((category) => (
             <ChipWrapper key={category.category_id}>
@@ -281,17 +179,12 @@ const View: NextPage = () => {
               >
                 {category.component()}
               </CategoryChip>
+              <CategoryName>{category.category_name}</CategoryName>
             </ChipWrapper>
           ))}
         </CategoryList>
       </CategoryContainer>
-      <ItemList
-        onWheel={(e) => {
-          if (Math.abs(e.deltaY) > 30) {
-            setIsVisible(e.deltaY < 0);
-          }
-        }}
-      >
+      <ItemList>
         {data.map((item) => (
           <LinkWrapper
             href={`/view/${item.itemId}`}

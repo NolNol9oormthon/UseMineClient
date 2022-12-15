@@ -136,7 +136,7 @@ const Detail = () => {
   const [data, setData] = useState<ItemDetailProps>();
 
   const router = useRouter();
-  const { itemId } = router.query;
+  const { id } = router.query;
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
@@ -144,7 +144,7 @@ const Detail = () => {
 
   useEffect(() => {
     const get = async () => {
-      getDetailData(Number(itemId)).then((res) => setData(res));
+      getDetailData(Number(id)).then((res) => setData(res));
     };
     get();
   });
