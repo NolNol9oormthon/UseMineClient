@@ -5,9 +5,9 @@ import UserProfileFill from '../../assets/icons/user-profile-fill.svg';
 import { ItemProps } from '../../pages/view';
 
 export enum ItemState {
-  AVAILABLE = 'AVAILABLE',
-  RESERVED = 'RESERVED',
-  COMPLETE = 'COMPLETE',
+  AVAILABLE = '나눔 가능',
+  RESERVED = '예약중',
+  COMPLETE = '완료',
 }
 
 const Container = styled.div`
@@ -102,31 +102,32 @@ const WriterSection = styled.div`
 `;
 
 const Item = ({
-  state_id,
-  item_name,
-  item_image,
-}: Pick<ItemProps, 'state_id' | 'item_name' | 'item_image'>) => {
+  state,
+  itemName,
+  imageUrl,
+  ownerNickname,
+}: Pick<ItemProps, 'state' | 'itemName' | 'imageUrl' | 'ownerNickname'>) => {
   return (
     <Container>
-      <ItemImage src={item_image} />
+      <ItemImage src={imageUrl} />
       <DescriptionSection>
         <TextSection>
-          {state_id === ItemState.AVAILABLE ? (
+          {state === ItemState.AVAILABLE ? (
             <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip>
           ) : null}
-          {state_id === ItemState.RESERVED ? (
+          {state === ItemState.RESERVED ? (
             <StateChip state={ItemState.RESERVED}>전달 중</StateChip>
           ) : null}
-          {state_id === ItemState.COMPLETE ? (
+          {state === ItemState.COMPLETE ? (
             <StateChip state={ItemState.COMPLETE}>종료</StateChip>
           ) : null}
-          <Name state={state_id}>{item_name}</Name>
+          <Name state={state}>{itemName}</Name>
           <WriterSection>
             <UserProfileFill />
-            <Nickname>ㅁㄴㅇ</Nickname>
+            <Nickname>{ownerNickname}</Nickname>
           </WriterSection>
         </TextSection>
-        <AvaliableTime state={state_id}>12:00 ~ 13:00</AvaliableTime>
+        <AvaliableTime state={state}>12:00 ~ 13:00</AvaliableTime>
       </DescriptionSection>
     </Container>
   );

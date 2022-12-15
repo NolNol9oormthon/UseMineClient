@@ -5,17 +5,25 @@ const LinkWrapper = ({
   children,
   href,
   isDisabled,
+  itemId,
   ...props
 }: {
   children: React.ReactNode;
   href: string;
   isDisabled: boolean;
+  itemId?: number;
 }) => {
   if (isDisabled) {
     return <>{children}</>;
   }
   return (
-    <Link href={href} {...props}>
+    <Link
+      href={{
+        pathname: href,
+        query: { itemId },
+      }}
+      {...props}
+    >
       {children}
     </Link>
   );

@@ -1,10 +1,14 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 import UserProfileFill from '../../assets/icons/user-profile-fill.svg';
 import Header from '../../src/components/Header';
 import { ItemState } from '../../src/components/Item';
+import { getDetailData } from '../../src/apis';
+
+import { ItemProps } from '.';
 
 const Container = styled.div`
   position: relative;
@@ -121,46 +125,52 @@ const Button = styled.button<{ windowWidth: number }>`
   line-height: 18px;
 `;
 
-const Detail: NextPage = () => {
-  const [windowWidth, setWindowWidth] = useState<number>(0);
+interface ItemDetailProps extends ItemProps {
+  chatUrl: string;
+  content: string;
+  owner: boolean;
+}
 
-  const url = 'https://menu.mt.co.kr/moneyweek/thumb/2022/02/04/06/2022020410348097173_1.jpg';
-  const state_id = 'AVAILABLE';
+const Detail = () => {
+  const [windowWidth, setWindowWidth] = useState<number>(0);
+  const [data, setData] = useState<ItemDetailProps>();
+
+  const router = useRouter();
+  const { itemId } = router.query;
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
   }, []);
 
+  useEffect(() => {
+    const get = async () => {
+      getDetailData(Number(itemId)).then((res) => setData(res));
+    };
+    get();
+  });
+
   return (
     <Container>
       <Header headerTitle="" />
       <ImageWrapper>
-        <Image src={url} />
+        <Image src={data?.imageUrl} alt={data?.itemName} />
       </ImageWrapper>
       <WriterSection>
         <UserProfileFill />
-        <Nickname>ㅁㄴㅇ</Nickname>
+        <Nickname>{data?.ownerNickname}</Nickname>
       </WriterSection>
       <TextSection>
-        {state_id === ItemState.AVAILABLE ? (
+        {data?.state === ItemState.AVAILABLE ? (
           <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip>
         ) : null}
-        {/* {state_id === ItemState.RESERVED ? (
+        {data?.state === ItemState.RESERVED ? (
           <StateChip state={ItemState.RESERVED}>전달 중</StateChip>
         ) : null}
-        {state_id === ItemState.COMPLETE ? (
+        {data?.state === ItemState.COMPLETE ? (
           <StateChip state={ItemState.COMPLETE}>종료</StateChip>
-        ) : null} */}
-        <Title>새콤한 귤모자</Title>
-        <Description>
-          제주도 여행 끝나고 이제 안쓸 것 같은 귤모자 나눔합니다. 공항 근처에서 구매 했는데, 한번만
-          사용했습니다. 가져가실 분 찾아요 제주도 여행 끝나고 이제 안쓸 것 같은 귤모자 나눔합니다.
-          공항 근처에서 구매 했는데, 한번만 사용했습니다. 가져가실 분 찾아요 제주도 여행 끝나고 이제
-          안쓸 것 같은 귤모자 나눔합니다. 공항 근처에서 구매 했는데, 한번만 사용했습니다. 가져가실
-          분 찾아요 제주도 여행 끝나고 이제 안쓸 것 같은 귤모자 나눔합니다. 공항 근처에서 구매
-          했는데, 한번만 사용했습니다. 가져가실 분 찾아 제주도 여행 끝나고 이제 안쓸 것 같은 귤모자
-          나눔합니다. 공항 근처에서 구매 했는데, 한번만 사용했습니다. 가져가실 분 찾아요
-        </Description>
+        ) : null}
+        <Title>{data?.itemName}</Title>
+        <Description>{data?.content}</Description>
       </TextSection>
       <AbaliableTimeSection>
         나눔가능 시간

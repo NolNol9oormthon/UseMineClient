@@ -1,11 +1,24 @@
 import axios from 'axios';
 
-export const getMyData = async () => {
+export const getAllData = async () => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://43.201.147.29:50883/items/1',
-      headers: { contentType: 'application/json', 'Logined-User': 123 },
+      url: 'http://3.34.62.141:58287/items',
+      headers: { contentType: 'application/json', 'Logined-User': 999 },
+    });
+    return response.data;
+  } catch (error) {
+    console.dir(error);
+  }
+};
+
+export const getDetailData = async (id: number) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `http://3.34.62.141:58287/items/${id}`,
+      headers: { contentType: 'application/json', 'Logined-User': 999 },
     });
     return response.data;
   } catch (error) {
