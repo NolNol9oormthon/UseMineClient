@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { createHashRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 
 import ChevronLeftBlack from '../assets/icons/chevron-left-black.svg';
 import CameraIcon from '../assets/icons/camera.svg';
 import FoodIcon from '../assets/icons/food.svg';
-import ElectronicsIcon from '../assets/icons/electronics.svg';
+import CouponIcon from '../assets/icons/coupon.svg';
 import EtcIcon from '../assets/icons/etc.svg';
 import SouvenirIcon from '../assets/icons/souvenir.svg';
 import NecessitiesIcon from '../assets/icons/necessities.svg';
 import ClothesIcon from '../assets/icons/clothes.svg';
 import CheckIcon from '../assets/icons/check-white.svg';
 import { createItem } from '../src/apis/index';
-import { createHashRouter } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100%;
@@ -356,7 +356,7 @@ const Home: NextPage = () => {
     {
       name: '할인권',
       value: 'COUPON',
-      icon: ElectronicsIcon,
+      icon: CouponIcon,
     },
     {
       name: '기타',

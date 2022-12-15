@@ -4,7 +4,7 @@ export const getAllData = async (category: string, cursorId: number) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://3.34.62.141:58287/items',
+      url: `${process.env.NEXT_PUBLIC_DB_HOST}/items`,
       params: { category, cursorId },
       headers: { contentType: 'application/json', 'Logined-User': 999 },
     });
@@ -20,7 +20,7 @@ export const getDetailData = async (id: number) => {
     console.log(id);
     const response = await axios({
       method: 'get',
-      url: `http://3.34.62.141:58287/items/${id}`,
+      url: `${process.env.NEXT_PUBLIC_DB_HOST}/items/${id}`,
       headers: { contentType: 'application/json', 'Logined-User': 999 },
     });
     return response.data;
