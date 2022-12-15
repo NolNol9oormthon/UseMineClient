@@ -9,8 +9,9 @@ import UserProfileOutline from '../../assets/icons/user-profile-outline.svg';
 
 const Container = styled.div<{ windowWidth: number; isDetailPage: boolean }>`
   width: ${({ windowWidth }) => (windowWidth > 420 ? '420px' : `calc(100% + 40px)`)};
-  transform: ${({ windowWidth }) => (windowWidth > 420 ? `translateX(calc(50% + 100px))` : null)};
-  margin: 0 -20px;
+  /* transform: ${({ windowWidth }) => (windowWidth > 420 ? `translateX(calc(-50%))` : null)}; */
+  left: ${({ windowWidth }) => (windowWidth > 420 ? `calc(50% - 210px)` : 0)};
+  /* margin: 0 -20px; */
   max-width: 420px;
   height: 56px;
   display: flex;
@@ -20,7 +21,7 @@ const Container = styled.div<{ windowWidth: number; isDetailPage: boolean }>`
   background-color: ${({ isDetailPage }) => (isDetailPage ? 'transparent' : null)};
   position: fixed;
   top: 0;
-  left: 0;
+  /* left: 0; */
   z-index: 10;
 `;
 

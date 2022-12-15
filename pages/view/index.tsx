@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import Header from '../../src/components/Header';
 import Item, { ItemState } from '../../src/components/Item';
@@ -14,155 +15,43 @@ import Ticket from '../../assets/icons/ticket_orange.svg';
 import Souvenir from '../../assets/icons/souvenir_orange.svg';
 import Etc from '../../assets/icons/etc_orange.svg';
 import { getAllData } from '../../src/apis';
+import useObserver from '../../src/hooks/useObserver';
 
 const mockCategories = [
   {
-    category_id: 0,
+    category_id: 'all',
     category_name: '모든 물품',
     component: () => <All />,
   },
   {
-    category_id: 1,
+    category_id: 'food',
     category_name: '식품',
     component: () => <Food />,
   },
   {
-    category_id: 2,
+    category_id: 'clothes',
     category_name: '의류',
     component: () => <Clothes />,
   },
   {
-    category_id: 3,
+    category_id: 'necessities',
     category_name: '생활용품',
     component: () => <Necessities />,
   },
   {
-    category_id: 4,
+    category_id: 'ticket',
     category_name: '할인권',
     component: () => <Ticket />,
   },
   {
-    category_id: 5,
+    category_id: 'souvenir',
     category_name: '기념품',
     component: () => <Souvenir />,
   },
   {
-    category_id: 6,
+    category_id: 'etc',
     category_name: '기타',
     component: () => <Etc />,
-  },
-];
-
-const mockItems = [
-  {
-    id: 1,
-    writer_id: 111,
-    writer_nickname: '파란 감귤',
-    item_name: '귤모자',
-    category_id: 1,
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'AVAILABLE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 2,
-    writer_id: 222,
-    writer_nickname: '노란 돌하르방',
-    category_id: 1,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'RESERVED',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 3,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 4,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 5,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 6,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 7,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 8,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 9,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
-  },
-  {
-    id: 10,
-    writer_id: 333,
-    writer_nickname: '파란 감귤',
-    category_id: 3,
-    item_name: '귤모자',
-    item_image: 'http://gdimg.gmarket.co.kr/2315388446/still/600?ver=1640008924',
-    state_id: 'COMPLETE',
-    avaliable_start_time: '12시 00분',
-    avaliable_end_time: '13시 00분',
   },
 ];
 
@@ -171,9 +60,10 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
 `;
 
-const CategoryContainer = styled.div<{ isVisible: boolean }>`
+const CategoryContainer = styled.div`
   margin: 0 -20px;
   position: absolute;
   overflow-x: scroll;
@@ -182,7 +72,7 @@ const CategoryContainer = styled.div<{ isVisible: boolean }>`
   ::-webkit-scrollbar {
     display: none;
   }
-  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 const CategoryList = styled.div`
@@ -195,6 +85,12 @@ const CategoryList = styled.div`
 
 const ChipWrapper = styled.div`
   position: relative;
+<<<<<<< HEAD
+=======
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+>>>>>>> a6546c72169d91c846e836f2d991984622f83746
 `;
 
 const StyledCheck = styled(Check)`
@@ -222,14 +118,22 @@ const CategoryChip = styled.button`
   z-index: 1;
 `;
 
+const CategoryName = styled.span`
+  margin-top: 8px;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 14px;
+  color: ${({ theme }) => theme.colors.gray500};
+`;
+
 const ItemList = styled.div`
   display: flex;
   margin-top: 56px;
   flex-direction: column;
   gap: 16px;
-  padding: 80px 0 0 0;
+  padding: 108px 0 0 0;
   height: 100%;
-  max-height: calc(100vh - 72px);
+  max-height: calc(100vh - 56px);
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
@@ -249,27 +153,32 @@ export interface ItemProps {
 }
 
 const View: NextPage = () => {
-  const [clickedCategoryChip, setClickedCategoryChip] = useState<number>(0);
-  const [isVisible, setIsVisible] = useState(true);
-  const [data, setData] = useState<ItemProps[]>([]);
+  const [clickedCategoryChip, setClickedCategoryChip] = useState<string>('all');
 
-  const handelCategoryChipClick = (catogoryId: number) => {
-    setClickedCategoryChip(catogoryId);
+  const { data, fetchNextPage, hasNextPage, status } = useInfiniteQuery(
+    ['infiniteDatas', clickedCategoryChip],
+    ({ pageParam = 0 }) => getAllData(clickedCategoryChip, pageParam),
+    {
+      getNextPageParam: (lastPage) => {
+        return lastPage[lastPage.length - 1]?.itemId;
+      },
+    },
+  );
+
+  const onIntersect: IntersectionObserverCallback = ([entry]) => {
+    entry.isIntersecting && fetchNextPage();
   };
 
-  useEffect(() => {
-    const get = async () => {
-      getAllData().then((res) => setData(res));
-    };
-    get();
-  }, []);
+  const { setTarget } = useObserver({ onIntersect });
 
-  console.log(data);
+  const handelCategoryChipClick = (catogoryId: string) => {
+    setClickedCategoryChip(catogoryId);
+  };
 
   return (
     <Container>
       <Header headerTitle="나눔목록" />
-      <CategoryContainer isVisible={isVisible}>
+      <CategoryContainer>
         <CategoryList>
           {mockCategories.map((category) => (
             <ChipWrapper key={category.category_id}>
@@ -281,26 +190,27 @@ const View: NextPage = () => {
               >
                 {category.component()}
               </CategoryChip>
+              <CategoryName>{category.category_name}</CategoryName>
             </ChipWrapper>
           ))}
         </CategoryList>
       </CategoryContainer>
-      <ItemList
-        onWheel={(e) => {
-          if (Math.abs(e.deltaY) > 30) {
-            setIsVisible(e.deltaY < 0);
-          }
-        }}
-      >
-        {data.map((item) => (
-          <LinkWrapper
-            href={`/view/${item.itemId}`}
-            isDisabled={item.state === ItemState.COMPLETE}
-            key={item.itemId}
-          >
-            <Item {...item} />
-          </LinkWrapper>
-        ))}
+      <ItemList>
+        <>
+          {status === 'success' &&
+            data.pages.map((page) => {
+              return page.map((item: ItemProps) => (
+                <LinkWrapper
+                  href={`/view/${item.itemId}`}
+                  isDisabled={item.state === ItemState.COMPLETE}
+                  key={item.itemId}
+                >
+                  <Item {...item} />
+                </LinkWrapper>
+              ));
+            })}
+        </>
+        <div ref={setTarget}></div>
       </ItemList>
     </Container>
   );
