@@ -3,14 +3,17 @@ import styled from 'styled-components';
 import { ItemProps } from '../../pages/view';
 import { ItemState } from './Item';
 
-const Container = styled.div`
+const Container = styled.div<{ isAvailable: boolean; isReserved: boolean; isComplete: boolean }>`
   width: 100%;
-
   display: flex;
   flex-direction: column;
-
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.tam_Orange50};
+  background-color: ${({ theme, isAvailable, isReserved }) =>
+    isAvailable
+      ? theme.colors.tam_Orange50
+      : isReserved
+      ? theme.colors.tam_blue50
+      : theme.colors.gray50};
   padding: 16px;
 `;
 
@@ -80,16 +83,31 @@ const ButtonSection = styled.div`
 const CancelButton = styled.button`
   border-radius: 8px;
   width: 50%;
+  background-color: ${({ theme }) => theme.colors.tam_Orange100};
+  color: ${({ theme }) => theme.colors.tam_Orange500};
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
 `;
 
 const CompleteButton = styled.button`
   border-radius: 8px;
   width: 50%;
+  background-color: ${({ theme }) => theme.colors.tam_Orange500};
+  color: ${({ theme }) => theme.colors.white};
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
 `;
 
 const LongCancelButton = styled.button`
   border-radius: 8px;
   width: 100%;
+  background-color: ${({ theme }) => theme.colors.tam_blue100};
+  color: ${({ theme }) => theme.colors.tam_blue400};
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
 `;
 
 const ShareCard = ({
@@ -97,34 +115,32 @@ const ShareCard = ({
   itemName,
   state,
 }: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state'>) => {
+  const isAvailable = state === ItemState.AVAILABLE;
+  const isReserved = state === ItemState.RESERVED;
+  const isComplete = state === ItemState.COMPLETE;
+
   return (
-    <Container>
+    <Container isAvailable={isAvailable} isReserved={isReserved} isComplete={isComplete}>
       <ItemSection>
         <ImageContainer>
           <Image src={imageUrl} />
         </ImageContainer>
         <TextContainer>
-          {state === ItemState.AVAILABLE ? (
-            <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip>
-          ) : null}
-          {state === ItemState.RESERVED ? (
-            <StateChip state={ItemState.RESERVED}>전달 중</StateChip>
-          ) : null}
-          {state === ItemState.COMPLETE ? (
-            <StateChip state={ItemState.COMPLETE}>종료</StateChip>
-          ) : null}
+          {isAvailable ? <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip> : null}
+          {isReserved ? <StateChip state={ItemState.RESERVED}>전달 중</StateChip> : null}
+          {isComplete ? <StateChip state={ItemState.COMPLETE}>종료</StateChip> : null}
           <Name state={state}>{itemName}</Name>
         </TextContainer>
       </ItemSection>
-      {state === ItemState.COMPLETE ? null : (
+      {isComplete ? null : (
         <ButtonSection>
-          {state === ItemState.AVAILABLE ? (
+          {isAvailable ? (
             <>
               <CancelButton>나눔 취소</CancelButton>
               <CompleteButton>나눔 완료</CompleteButton>
             </>
           ) : null}
-          {state === ItemState.RESERVED ? <LongCancelButton>나눔 취소</LongCancelButton> : null}
+          {isReserved ? <LongCancelButton>나눔 취소</LongCancelButton> : null}
         </ButtonSection>
       )}
     </Container>

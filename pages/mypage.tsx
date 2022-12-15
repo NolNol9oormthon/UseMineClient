@@ -7,6 +7,7 @@ import ShareCard from '../src/components/ShareCard';
 import Checkbox from '../assets/icons/checkbox.svg';
 import { getMyData } from '../src/apis';
 import { ItemProps } from './view';
+import { ItemState } from '../src/components/Item';
 
 enum TAB {
   COMPLETED = 'COMPLETED',
@@ -141,7 +142,7 @@ const Mypage: NextPage = () => {
         </TabMenu>
       </TabSection>
       <Contents>
-        {tab === TAB.COMPLETED ? (
+        {tab === TAB.NOTCOMPLETED ? (
           <CheckboxWrapper>
             <CheckboxTitle>미완료 보기</CheckboxTitle>
             <HiddenCheckbox
@@ -160,6 +161,11 @@ const Mypage: NextPage = () => {
 
         {tab === TAB.COMPLETED
           ? data && data.completedItems.map((item) => <ShareCard key={item.itemId} {...item} />)
+          : isChecked
+          ? data &&
+            data.notCompletedItems
+              .filter((item) => item.state === ItemState.AVAILABLE)
+              .map((item) => <ShareCard key={item.itemId} {...item} />)
           : data && data.notCompletedItems.map((item) => <ShareCard key={item.itemId} {...item} />)}
       </Contents>
     </>
