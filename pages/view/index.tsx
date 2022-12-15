@@ -1,21 +1,58 @@
 import { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import Header from '../../src/components/Header';
 import Item, { ItemState } from '../../src/components/Item';
 import LinkWrapper from '../../src/components/LinkWrapper';
+import Check from '../../assets/icons/check_orange.svg';
+import All from '../../assets/icons/all_orange.svg';
+import Food from '../../assets/icons/food_orange.svg';
+import Clothes from '../../assets/icons/clothes_orange.svg';
+import Necessities from '../../assets/icons/necessities_orange.svg';
+import Ticket from '../../assets/icons/ticket_orange.svg';
+import Souvenir from '../../assets/icons/souvenir_orange.svg';
+import Etc from '../../assets/icons/etc_orange.svg';
+import { getAllData } from '../../src/apis';
 
 const mockCategories = [
-  { category_id: 0, category_name: '모든\n물품' },
-  { category_id: 1, category_name: '우도' },
-  { category_id: 2, category_name: '좌도' },
-  { category_id: 3, category_name: '절권도' },
-  { category_id: 4, category_name: '태권도' },
-  { category_id: 5, category_name: '너도나도' },
-  { category_id: 6, category_name: '도도새' },
-  { category_id: 7, category_name: '김치' },
+  {
+    category_id: 0,
+    category_name: '모든 물품',
+    component: () => <All />,
+  },
+  {
+    category_id: 1,
+    category_name: '식품',
+    component: () => <Food />,
+  },
+  {
+    category_id: 2,
+    category_name: '의류',
+    component: () => <Clothes />,
+  },
+  {
+    category_id: 3,
+    category_name: '생활용품',
+    component: () => <Necessities />,
+  },
+  {
+    category_id: 4,
+    category_name: '할인권',
+    component: () => <Ticket />,
+  },
+  {
+    category_id: 5,
+    category_name: '기념품',
+    component: () => <Souvenir />,
+  },
+  {
+    category_id: 6,
+    category_name: '기타',
+    component: () => <Etc />,
+  },
 ];
+
 const mockItems = [
   {
     id: 1,
@@ -156,7 +193,19 @@ const CategoryList = styled.div`
   margin-top: 56px;
 `;
 
-const CategoryChip = styled.button<{ isClicked: boolean }>`
+const ChipWrapper = styled.div`
+  position: relative;
+`;
+
+const StyledCheck = styled(Check)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+`;
+
+const CategoryChip = styled.button`
+  position: relative;
   width: 56px;
   height: 56px;
   background-color: ${({ theme }) => theme.colors.tam_Orange50};
@@ -170,8 +219,7 @@ const CategoryChip = styled.button<{ isClicked: boolean }>`
   font-weight: 500;
   font-size: 12px;
   line-height: 14px;
-  border: ${({ isClicked, theme }) =>
-    isClicked ? `1.5px solid ${theme.colors.tam_Orange500}` : null};
+  z-index: 1;
 `;
 
 const ItemList = styled.div`
@@ -189,41 +237,51 @@ const ItemList = styled.div`
 `;
 
 export interface ItemProps {
-  id: string;
-  writer_id: string;
-  writer_nickname: string;
-  item_name: string;
-  category_id: string;
-  item_image: string;
-  state_id: string;
-  avaliable_start_time: string;
-  avaliable_end_time: string;
+  itemId: number;
+  ownerId: string;
+  ownerNickname: string;
+  itemName: string;
+  category: string;
+  imageUrl: string;
+  state: string;
+  availableStartTime: string;
+  availableEndTime: string;
 }
 
 const View: NextPage = () => {
-  const [clickedCategoryChip, setClickedCategoryChip] = useState<number>();
+  const [clickedCategoryChip, setClickedCategoryChip] = useState<number>(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const [data, setData] = useState<ItemProps[]>([]);
 
   const handelCategoryChipClick = (catogoryId: number) => {
     setClickedCategoryChip(catogoryId);
   };
 
-  const [isVisible, setIsVisible] = useState(true);
+  useEffect(() => {
+    const get = async () => {
+      getAllData().then((res) => setData(res));
+    };
+    get();
+  }, []);
+
+  console.log(data);
 
   return (
     <Container>
       <Header headerTitle="나눔목록" />
       <CategoryContainer isVisible={isVisible}>
         <CategoryList>
-          {mockCategories.map((category, index) => (
-            <CategoryChip
-              key={index}
-              onClick={() => {
-                handelCategoryChipClick(category.category_id);
-              }}
-              isClicked={clickedCategoryChip === category.category_id}
-            >
-              {category.category_name}
-            </CategoryChip>
+          {mockCategories.map((category) => (
+            <ChipWrapper key={category.category_id}>
+              {clickedCategoryChip === category.category_id ? <StyledCheck /> : null}
+              <CategoryChip
+                onClick={() => {
+                  handelCategoryChipClick(category.category_id);
+                }}
+              >
+                {category.component()}
+              </CategoryChip>
+            </ChipWrapper>
           ))}
         </CategoryList>
       </CategoryContainer>
@@ -234,11 +292,11 @@ const View: NextPage = () => {
           }
         }}
       >
-        {mockItems.map((item) => (
+        {data.map((item) => (
           <LinkWrapper
-            href={`/view/${item.id}`}
-            isDisabled={item.state_id === ItemState.COMPLETE}
-            key={item.id}
+            href={`/view/${item.itemId}`}
+            isDisabled={item.state === ItemState.COMPLETE}
+            key={item.itemId}
           >
             <Item {...item} />
           </LinkWrapper>
