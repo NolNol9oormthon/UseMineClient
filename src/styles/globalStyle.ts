@@ -9,10 +9,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: NanumSquare Neo variable;
     margin: 0px !important;
   }
-  
-  #root {
-    margin: 0 auto;
-  }
+
   
   html {
     font-size: 62.5%;
