@@ -14,6 +14,7 @@ import NecessitiesIcon from '../assets/icons/necessities.svg';
 import ClothesIcon from '../assets/icons/clothes.svg';
 import CheckIcon from '../assets/icons/check-white.svg';
 import { createItem } from '../src/apis/index';
+import { createHashRouter } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100%;
@@ -444,9 +445,13 @@ const Home: NextPage = () => {
     formData.append('ownerId', String(localStorage.getItem('userId')));
 
     const createItemResult = await createItem(formData).then((data) => {
-        console.log(data);
-        router.push('/view');
+      console.log(data);
+      router.push('/view');
     });
+  };
+
+  const prevOnClick = () => {
+    router.push('/');
   };
 
   return (
@@ -501,7 +506,7 @@ const Home: NextPage = () => {
       ) : (
         <>
           <Header>
-            <PrevButton>
+            <PrevButton onClick={prevOnClick}>
               <ChevronLeftBlack />
             </PrevButton>
             <HeaderTitle>물품정보 등록</HeaderTitle>
