@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import UserProfileFill from '../../assets/icons/user-profile-fill.svg';
 import { ItemProps } from '../../pages/view';
@@ -15,7 +16,7 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const ItemImage = styled.img`
+const ItemImage = styled(LazyLoadImage)`
   display: flex;
   min-width: 116px;
   width: 116px;

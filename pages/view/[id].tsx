@@ -108,7 +108,7 @@ const AbaliableTimeText = styled.span`
 const ButtonWhiteBackground = styled.div<{ windowWidth: number }>`
   position: fixed;
   bottom: 0px;
-  width: ${({ windowWidth }) => (windowWidth > 420 ? '380px' : `calc(100% - 20px)`)};
+  width: ${({ windowWidth }) => (windowWidth > 420 ? '420px' : `calc(100%)`)};
   left: ${({ windowWidth }) => (windowWidth > 420 ? `calc(50% - 210px)` : 0)};
   padding: 0 20px;
   padding-bottom: 40px;
@@ -116,7 +116,7 @@ const ButtonWhiteBackground = styled.div<{ windowWidth: number }>`
 `;
 
 const Button = styled.button<{ windowWidth: number }>`
-  width: ${({ windowWidth }) => (windowWidth > 420 ? '380px' : `calc(100% - 20px)`)};
+  width: 100%;
   background-color: ${({ theme }) => theme.colors.tam_Orange500};
   color: ${({ theme }) => theme.colors.white};
   height: 56px;
