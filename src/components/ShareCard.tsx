@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import { ItemProps } from '../../pages/view';
 import { ItemState } from './Item';
 
 const Container = styled.div`
@@ -7,7 +8,7 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
+
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.tam_Orange50};
   padding: 16px;
@@ -76,38 +77,56 @@ const ButtonSection = styled.div`
   gap: 10px;
 `;
 
-const Button = styled.button`
-  border: 1px solid red;
+const CancelButton = styled.button`
   border-radius: 8px;
   width: 50%;
 `;
 
-const ShareCard = () => {
-  const state_id = 'AVAILABLE';
-  const item_name = '감귤모자';
+const CompleteButton = styled.button`
+  border-radius: 8px;
+  width: 50%;
+`;
+
+const LongCancelButton = styled.button`
+  border-radius: 8px;
+  width: 100%;
+`;
+
+const ShareCard = ({
+  imageUrl,
+  itemName,
+  state,
+}: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state'>) => {
   return (
     <Container>
       <ItemSection>
         <ImageContainer>
-          <Image src="https://menu.mt.co.kr/moneyweek/thumb/2022/02/04/06/2022020410348097173_1.jpg" />
+          <Image src={imageUrl} />
         </ImageContainer>
         <TextContainer>
-          {/* {state_id === ItemState.AVAILABLE ? (
+          {state === ItemState.AVAILABLE ? (
             <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip>
-          ) : null} */}
-          {/* {state_id === ItemState.RESERVED ? (
+          ) : null}
+          {state === ItemState.RESERVED ? (
             <StateChip state={ItemState.RESERVED}>전달 중</StateChip>
           ) : null}
-          {state_id === ItemState.COMPLETE ? (
+          {state === ItemState.COMPLETE ? (
             <StateChip state={ItemState.COMPLETE}>종료</StateChip>
-          ) : null} */}
-          <Name state={state_id}>{item_name}</Name>
+          ) : null}
+          <Name state={state}>{itemName}</Name>
         </TextContainer>
       </ItemSection>
-      <ButtonSection>
-        <Button>d</Button>
-        <Button>d</Button>
-      </ButtonSection>
+      {state === ItemState.COMPLETE ? null : (
+        <ButtonSection>
+          {state === ItemState.AVAILABLE ? (
+            <>
+              <CancelButton>나눔 취소</CancelButton>
+              <CompleteButton>나눔 완료</CompleteButton>
+            </>
+          ) : null}
+          {state === ItemState.RESERVED ? <LongCancelButton>나눔 취소</LongCancelButton> : null}
+        </ButtonSection>
+      )}
     </Container>
   );
 };

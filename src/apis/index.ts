@@ -29,9 +29,8 @@ export const getDetailData = async (id: number) => {
   }
 };
 
-
 export const login = async (id: number, profileUrl: string) => {
-  let returnValue = 0;
+  const returnValue = 0;
   const result = await axios.post(
     process.env.NEXT_PUBLIC_DB_HOST + `/login`,
     `{"id":"${id}", "profileUrl":"${profileUrl}"}`,
@@ -67,4 +66,18 @@ export const createItem = async (formData: FormData) => {
 
   return returnValue;
   // return result.data;
+};
+
+export const getMyData = async (userId: number) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: 'http://3.34.62.141:58287//my-items',
+      headers: { contentType: 'application/json', 'Logined-User': userId },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.dir(error);
+  }
 };

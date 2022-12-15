@@ -17,13 +17,7 @@ const LinkWrapper = ({
     return <>{children}</>;
   }
   return (
-    <Link
-      href={{
-        pathname: href,
-        query: { itemId },
-      }}
-      {...props}
-    >
+    <Link href={href} {...props}>
       {children}
     </Link>
   );
