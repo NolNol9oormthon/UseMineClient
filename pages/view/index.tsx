@@ -5,17 +5,53 @@ import styled from 'styled-components';
 import Header from '../../src/components/Header';
 import Item, { ItemState } from '../../src/components/Item';
 import LinkWrapper from '../../src/components/LinkWrapper';
+import Check from '../../assets/icons/check.svg';
+import All from '../../assets/icons/all.svg';
+import Food from '../../assets/icons/food.svg';
+import Apparel from '../../assets/icons/apparel.svg';
+import Life from '../../assets/icons/life.svg';
+import Ticket from '../../assets/icons/ticket.svg';
+import Souvenir from '../../assets/icons/souvenir.svg';
+import Etc from '../../assets/icons/etc.svg';
 
 const mockCategories = [
-  { category_id: 0, category_name: '모든\n물품' },
-  { category_id: 1, category_name: '우도' },
-  { category_id: 2, category_name: '좌도' },
-  { category_id: 3, category_name: '절권도' },
-  { category_id: 4, category_name: '태권도' },
-  { category_id: 5, category_name: '너도나도' },
-  { category_id: 6, category_name: '도도새' },
-  { category_id: 7, category_name: '김치' },
+  {
+    category_id: 0,
+    category_name: '모든 물품',
+    component: () => <All />,
+  },
+  {
+    category_id: 1,
+    category_name: '식품',
+    component: () => <Food />,
+  },
+  {
+    category_id: 2,
+    category_name: '의류',
+    component: () => <Apparel />,
+  },
+  {
+    category_id: 3,
+    category_name: '생활용품',
+    component: () => <Life />,
+  },
+  {
+    category_id: 4,
+    category_name: '티켓',
+    component: () => <Ticket />,
+  },
+  {
+    category_id: 5,
+    category_name: '기념품',
+    component: () => <Souvenir />,
+  },
+  {
+    category_id: 6,
+    category_name: '기타',
+    component: () => <Etc />,
+  },
 ];
+
 const mockItems = [
   {
     id: 1,
@@ -156,7 +192,19 @@ const CategoryList = styled.div`
   margin-top: 56px;
 `;
 
-const CategoryChip = styled.button<{ isClicked: boolean }>`
+const ChipWrapper = styled.div`
+  position: relative;
+`;
+
+const StyledCheck = styled(Check)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+`;
+
+const CategoryChip = styled.button`
+  position: relative;
   width: 56px;
   height: 56px;
   background-color: ${({ theme }) => theme.colors.tam_Orange50};
@@ -170,8 +218,7 @@ const CategoryChip = styled.button<{ isClicked: boolean }>`
   font-weight: 500;
   font-size: 12px;
   line-height: 14px;
-  border: ${({ isClicked, theme }) =>
-    isClicked ? `1.5px solid ${theme.colors.tam_Orange500}` : null};
+  z-index: 1;
 `;
 
 const ItemList = styled.div`
@@ -201,29 +248,29 @@ export interface ItemProps {
 }
 
 const View: NextPage = () => {
-  const [clickedCategoryChip, setClickedCategoryChip] = useState<number>();
+  const [clickedCategoryChip, setClickedCategoryChip] = useState<number>(0);
+  const [isVisible, setIsVisible] = useState(true);
 
   const handelCategoryChipClick = (catogoryId: number) => {
     setClickedCategoryChip(catogoryId);
   };
-
-  const [isVisible, setIsVisible] = useState(true);
 
   return (
     <Container>
       <Header headerTitle="나눔목록" />
       <CategoryContainer isVisible={isVisible}>
         <CategoryList>
-          {mockCategories.map((category, index) => (
-            <CategoryChip
-              key={index}
-              onClick={() => {
-                handelCategoryChipClick(category.category_id);
-              }}
-              isClicked={clickedCategoryChip === category.category_id}
-            >
-              {category.category_name}
-            </CategoryChip>
+          {mockCategories.map((category) => (
+            <ChipWrapper key={category.category_id}>
+              {clickedCategoryChip === category.category_id ? <StyledCheck /> : null}
+              <CategoryChip
+                onClick={() => {
+                  handelCategoryChipClick(category.category_id);
+                }}
+              >
+                {category.component()}
+              </CategoryChip>
+            </ChipWrapper>
           ))}
         </CategoryList>
       </CategoryContainer>

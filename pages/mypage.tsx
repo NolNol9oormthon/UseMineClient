@@ -51,7 +51,7 @@ const Mypage: NextPage = () => {
             }}
             isHighlight={tab === TAB.NOTIFICATION}
           >
-            알림
+            진행
           </Tab>
           <Tab
             onClick={() => {
@@ -59,7 +59,7 @@ const Mypage: NextPage = () => {
             }}
             isHighlight={tab === TAB.MYARTICLE}
           >
-            내 게시글
+            완료
           </Tab>
         </TabMenu>
         <Contents></Contents>

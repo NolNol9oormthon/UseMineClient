@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import UserProfileFill from '../../assets/icons/user-profile-fill.svg';
@@ -99,17 +100,18 @@ const AbaliableTimeText = styled.span`
   color: ${({ theme }) => theme.colors.tam_Orange500};
 `;
 
-const ButtonWhiteBackground = styled.div`
+const ButtonWhiteBackground = styled.div<{ windowWidth: number }>`
   position: fixed;
   bottom: 0px;
   padding-bottom: 40px;
-  width: calc(100% - 40px);
+  width: ${({ windowWidth }) => (windowWidth > 420 ? '380px' : `calc(100% - 20px)`)};
+  transform: ${({ windowWidth }) => (windowWidth > 420 ? `translateX(calc(50% + 100px))` : null)};
   left: 20px;
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
-const Button = styled.button`
-  width: 100%;
+const Button = styled.button<{ windowWidth: number }>`
+  width: ${({ windowWidth }) => (windowWidth > 420 ? '380px' : `calc(100% - 20px)`)};
   background-color: ${({ theme }) => theme.colors.tam_Orange500};
   color: ${({ theme }) => theme.colors.white};
   height: 56px;
@@ -120,8 +122,14 @@ const Button = styled.button`
 `;
 
 const Detail: NextPage = () => {
+  const [windowWidth, setWindowWidth] = useState<number>(0);
+
   const url = 'https://menu.mt.co.kr/moneyweek/thumb/2022/02/04/06/2022020410348097173_1.jpg';
   const state_id = 'AVAILABLE';
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+  }, []);
 
   return (
     <Container>
@@ -158,8 +166,8 @@ const Detail: NextPage = () => {
         나눔가능 시간
         <AbaliableTimeText>12:00 ~ 13:00</AbaliableTimeText>
       </AbaliableTimeSection>
-      <ButtonWhiteBackground>
-        <Button>나눔 요청하기</Button>
+      <ButtonWhiteBackground windowWidth={windowWidth}>
+        <Button windowWidth={windowWidth}>나눔 요청하기</Button>
       </ButtonWhiteBackground>
     </Container>
   );
