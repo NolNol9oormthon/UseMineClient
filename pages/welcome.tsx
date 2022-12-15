@@ -7,6 +7,7 @@ import qs from 'qs';
 
 import ChevronRightBlue from '../assets/icons/chevron-right-blue.svg';
 import ChevronRightOrange from '../assets/icons/chevron-right-orange.svg';
+import { login } from '../src/apis';
 
 const Container = styled.div`
   width: 100%;
@@ -129,11 +130,16 @@ const Home: NextPage = () => {
             profileUrl: data.properties.profile_image,
           };
           // 백에 보내
-          const returnData = {
-            id: 'test3',
-            nickname: '곤란한 한라봉',
-          };
-          setUserInfo(returnData);
+          const loginResult = await login(data.id, data.properties.profile_image).then((data) => {
+            console.log(data);
+            localStorage.setItem('userId', data.id);
+            setUserInfo(data);
+          });
+          // const returnData = {
+          //   id: 'test3',
+          //   nickname: '곤란한 한라봉',
+          // };
+          // setUserInfo(returnData);
         }
         // setUserId(data.id);
         // setNickName(data.properties.nickname);
