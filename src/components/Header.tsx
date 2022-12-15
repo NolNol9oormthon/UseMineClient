@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -6,7 +6,11 @@ import ChevronLeftBlack from '../../assets/icons/chevron-left-black.svg';
 import UserProfileOutline from '../../assets/icons/user-profile-outline.svg';
 
 const Container = styled.div`
+  /* position: fixed;
+  left: 0;
+  top: 0; */
   width: 100%;
+  max-width: 420px;
   height: 56px;
   display: flex;
   justify-content: space-between;
@@ -24,9 +28,12 @@ const Title = styled.span`
 `;
 
 const Header = ({ headerTitle }: { headerTitle: string }) => {
+  const router = useRouter();
   return (
     <Container>
-      <ChevronLeftBlack />
+      <button onClick={() => router.back()}>
+        <ChevronLeftBlack />
+      </button>
       <Title>{headerTitle}</Title>
       <UserProfileOutline />
     </Container>
