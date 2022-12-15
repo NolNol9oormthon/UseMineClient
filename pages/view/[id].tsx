@@ -6,6 +6,7 @@ import Header from '../../src/components/Header';
 import { ItemState } from '../../src/components/Item';
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
   height: 100vh;
 `;
@@ -87,13 +88,35 @@ const AbaliableTimeSection = styled.div`
   font-size: 16px;
   line-height: 20px;
   color: ${({ theme }) => theme.colors.gray900};
+  padding-bottom: 152px;
 `;
+
 const AbaliableTimeText = styled.span`
   font-weight: 700;
   margin-left: 8px;
   font-size: 18px;
   line-height: 22px;
   color: ${({ theme }) => theme.colors.tam_Orange500};
+`;
+
+const ButtonWhiteBackground = styled.div`
+  position: fixed;
+  bottom: 0px;
+  padding-bottom: 40px;
+  width: calc(100% - 40px);
+  left: 20px;
+  background-color: ${({ theme }) => theme.colors.white};
+`;
+
+const Button = styled.button`
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.tam_Orange500};
+  color: ${({ theme }) => theme.colors.white};
+  height: 56px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 18px;
 `;
 
 const Detail: NextPage = () => {
@@ -123,13 +146,21 @@ const Detail: NextPage = () => {
         <Title>새콤한 귤모자</Title>
         <Description>
           제주도 여행 끝나고 이제 안쓸 것 같은 귤모자 나눔합니다. 공항 근처에서 구매 했는데, 한번만
-          사용했습니다. 가져가실 분 찾아요
+          사용했습니다. 가져가실 분 찾아요 제주도 여행 끝나고 이제 안쓸 것 같은 귤모자 나눔합니다.
+          공항 근처에서 구매 했는데, 한번만 사용했습니다. 가져가실 분 찾아요 제주도 여행 끝나고 이제
+          안쓸 것 같은 귤모자 나눔합니다. 공항 근처에서 구매 했는데, 한번만 사용했습니다. 가져가실
+          분 찾아요 제주도 여행 끝나고 이제 안쓸 것 같은 귤모자 나눔합니다. 공항 근처에서 구매
+          했는데, 한번만 사용했습니다. 가져가실 분 찾아 제주도 여행 끝나고 이제 안쓸 것 같은 귤모자
+          나눔합니다. 공항 근처에서 구매 했는데, 한번만 사용했습니다. 가져가실 분 찾아요
         </Description>
       </TextSection>
       <AbaliableTimeSection>
         나눔가능 시간
         <AbaliableTimeText>12:00 ~ 13:00</AbaliableTimeText>
       </AbaliableTimeSection>
+      <ButtonWhiteBackground>
+        <Button>나눔 요청하기</Button>
+      </ButtonWhiteBackground>
     </Container>
   );
 };

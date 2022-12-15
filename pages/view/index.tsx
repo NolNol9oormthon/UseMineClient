@@ -133,6 +133,7 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
 `;
 
 const CategoryContainer = styled.div<{ isVisible: boolean }>`
@@ -152,6 +153,7 @@ const CategoryList = styled.div`
   gap: 8px;
   padding: 8px 0;
   width: fit-content;
+  margin-top: 56px;
 `;
 
 const CategoryChip = styled.button<{ isClicked: boolean }>`
@@ -177,7 +179,7 @@ const ItemList = styled.div`
   margin-top: 56px;
   flex-direction: column;
   gap: 16px;
-  padding: 80px 0;
+  padding: 80px 0 0 0;
   height: 100%;
   max-height: calc(100vh - 72px);
   overflow-y: scroll;
@@ -227,7 +229,9 @@ const View: NextPage = () => {
       </CategoryContainer>
       <ItemList
         onWheel={(e) => {
-          setIsVisible(e.deltaY < 0);
+          if (Math.abs(e.deltaY) > 30) {
+            setIsVisible(e.deltaY < 0);
+          }
         }}
       >
         {mockItems.map((item) => (
