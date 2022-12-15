@@ -25,9 +25,9 @@ const Title = styled.span`
 const Header = ({ headerTitle }: { headerTitle: string }) => {
   return (
     <Container>
-      <Image src={ChevronLeftBlack} alt="/" />
+      <Image src={ChevronLeftBlack} alt="" />
       <Title>{headerTitle}</Title>
-      <Image src={UserProfileOutline} alt="/" />
+      <Image src={UserProfileOutline} alt="" />
     </Container>
   );
 };
