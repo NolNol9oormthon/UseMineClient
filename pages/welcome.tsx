@@ -7,7 +7,8 @@ import qs from 'qs';
 import Image from 'next/image';
 import Lottie from 'react-lottie';
 
-import { ChevronRightBlue, ChevronRightOrange } from '../assets/icons';
+import ChevronRightBlue from '../assets/icons/chevron-right-blue.svg';
+import ChevronRightOrange from '../assets/icons/chevron-right-orange.svg';
 import animation from '../assets/lottie/airplane_loading.json';
 
 const Container = styled.div`
@@ -183,13 +184,13 @@ const Home: NextPage = () => {
           <RegisterButton>
             <ButtonTextBlue>물품 등록하기</ButtonTextBlue>
             <ButtonIcon>
-              <Image src={ChevronRightBlue} alt="/" width={24} height={24} />
+              <ChevronRightBlue />
             </ButtonIcon>
           </RegisterButton>
           <ViewButton>
             <ButtonTextOrange>둘러보기</ButtonTextOrange>
             <ButtonIcon>
-              <Image src={ChevronRightOrange} alt="/" width={24} height={24} />
+              <ChevronRightOrange />
             </ButtonIcon>
           </ViewButton>
         </>

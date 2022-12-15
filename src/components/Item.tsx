@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
 
-import { UserProfileFill } from '../../assets/icons';
+import UserProfileFill from '../../assets/icons/user-profile-fill.svg';
 import { ItemProps } from '../../pages/view';
 
 export enum ItemState {
@@ -123,7 +123,7 @@ const Item = ({
           ) : null}
           <Name state={state_id}>{item_name}</Name>
           <WriterSection>
-            <Image src={UserProfileFill} width={14} height={14} alt="" />
+            <UserProfileFill />
             <Nickname>ㅁㄴㅇ</Nickname>
           </WriterSection>
         </TextSection>
