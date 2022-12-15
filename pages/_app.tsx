@@ -2,6 +2,8 @@ import Script from 'next/script';
 import styled, { ThemeProvider } from 'styled-components';
 import '../src/font/font.css';
 import type { AppProps } from 'next/app';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 
 import GlobalStyle from '../src/styles/globalStyle';
 import { theme } from '../src/styles/theme';
@@ -38,13 +40,16 @@ const App = ({ Component, pageProps }: AppProps) => {
     console.log(window.Kakao.isInitialized());
   }
 
+  const [queryClient] = useState(() => new QueryClient());
   return (
     <>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <BodyInner>
           <WebAppContainer>
-            <Component {...pageProps} />
+            <QueryClientProvider client={queryClient}>
+              <Component {...pageProps} />
+            </QueryClientProvider>
             <Script src="https://developers.kakao.com/sdk/js/kakao.js" onLoad={kakaoInit}></Script>
           </WebAppContainer>
         </BodyInner>
