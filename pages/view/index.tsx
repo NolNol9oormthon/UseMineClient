@@ -85,12 +85,9 @@ const CategoryList = styled.div`
 
 const ChipWrapper = styled.div`
   position: relative;
-<<<<<<< HEAD
-=======
   display: flex;
   flex-direction: column;
   align-items: center;
->>>>>>> a6546c72169d91c846e836f2d991984622f83746
 `;
 
 const StyledCheck = styled(Check)`
