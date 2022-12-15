@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import Header from '../src/components/Header';
+import ShareCard from '../src/components/ShareCard';
 
 enum TAB {
   NOTIFICATION = 'NOTIFICATION',
@@ -62,8 +63,10 @@ const Mypage: NextPage = () => {
             완료
           </Tab>
         </TabMenu>
-        <Contents></Contents>
       </TabSection>
+      <Contents>
+        <ShareCard />
+      </Contents>
     </>
   );
 };
