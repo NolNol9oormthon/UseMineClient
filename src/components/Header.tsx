@@ -14,10 +14,10 @@ const Container = styled.div<{ isDetailPage: boolean }>`
   height: 56px;
   display: flex;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 40px;
   align-items: center;
   background-color: ${({ isDetailPage }) => (isDetailPage ? 'transparent' : null)};
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
