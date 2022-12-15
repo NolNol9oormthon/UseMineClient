@@ -97,9 +97,6 @@ const Home: NextPage = () => {
   // let currentUrl = getAbsoluteURL().origin
   const router = useRouter();
   const ref = useRef(null);
-  React.useEffect(() => {
-    import('@lottiefiles/lottie-player');
-  });
 
   console.log(router);
   let currentUrl = '';

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -38,7 +37,7 @@ const TextSection = styled.div`
   gap: 8px;
 `;
 
-const StateChip = styled.div<{ state: string }>`
+const StateChip = styled.span<{ state: string }>`
   display: flex;
   height: 14px;
   font-weight: 500;
