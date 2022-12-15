@@ -123,11 +123,10 @@ const Item = ({
           ) : null}
           <Name state={state_id}>{item_name}</Name>
           <WriterSection>
-            <Image src={UserProfileFill} alt="/" width={14} height={14} />
+            <Image src={UserProfileFill} width={14} height={14} alt="" />
             <Nickname>ㅁㄴㅇ</Nickname>
           </WriterSection>
         </TextSection>
-
         <AvaliableTime state={state_id}>12:00 ~ 13:00</AvaliableTime>
       </DescriptionSection>
     </Container>

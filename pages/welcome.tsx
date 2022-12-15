@@ -92,8 +92,8 @@ const LottieContainer = styled.div`
 
 const Home: NextPage = () => {
   const [userInfo, setUserInfo] = useState({
-    id: "",
-    nickname: ""
+    id: '',
+    nickname: '',
   });
   // const [code, setCode] = useState('');
   // let currentUrl = getAbsoluteURL().origin
@@ -102,9 +102,9 @@ const Home: NextPage = () => {
   let currentUrl = '';
   try {
     if (!window) {
-      currentUrl = "http://localhost:3000"
+      currentUrl = 'http://localhost:3000';
     } else {
-      currentUrl = window.location.origin
+      currentUrl = window.location.origin;
       // currentUrl = "https://usemine-6a464.web.app"
     }
   } catch {
@@ -113,12 +113,12 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     console.log(router.query['code']);
-    let code = router.query['code'];
+    const code = router.query['code'];
 
     const getProfile = async () => {
       try {
         // Kakao SDK API를 이용해 사용자 정보 획득
-        let data = await window.Kakao.API.request({
+        const data = await window.Kakao.API.request({
           url: '/v2/user/me',
         });
         // 사용자 정보 변수에 저장
