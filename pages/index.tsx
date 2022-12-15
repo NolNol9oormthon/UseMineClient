@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import styled from 'styled-components';
+
 import JejuLogo from "../assets/icons/jeju-logo.svg";
 
 const Container = styled.div`
