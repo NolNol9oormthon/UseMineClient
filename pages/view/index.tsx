@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import Header from '../../src/components/Header';
 import Item, { ItemState } from '../../src/components/Item';
 import LinkWrapper from '../../src/components/LinkWrapper';
-import Check from '../../assets/icons/check.svg';
-import All from '../../assets/icons/all.svg';
-import Food from '../../assets/icons/food.svg';
-import Clothes from '../../assets/icons/clothes.svg';
-import Necessities from '../../assets/icons/necessities.svg';
-import Ticket from '../../assets/icons/ticket.svg';
-import Souvenir from '../../assets/icons/souvenir.svg';
-import Etc from '../../assets/icons/etc.svg';
+import Check from '../../assets/icons/check_orange.svg';
+import All from '../../assets/icons/all_orange.svg';
+import Food from '../../assets/icons/food_orange.svg';
+import Clothes from '../../assets/icons/clothes_orange.svg';
+import Necessities from '../../assets/icons/necessities_orange.svg';
+import Ticket from '../../assets/icons/ticket_orange.svg';
+import Souvenir from '../../assets/icons/souvenir_orange.svg';
+import Etc from '../../assets/icons/etc_orange.svg';
 import { getAllData } from '../../src/apis';
 
 const mockCategories = [
