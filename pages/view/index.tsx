@@ -58,6 +58,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
 `;
 
 const CategoryContainer = styled.div`
@@ -125,9 +126,9 @@ const ItemList = styled.div`
   margin-top: 56px;
   flex-direction: column;
   gap: 16px;
-  padding: 80px 0 0 0;
+  padding: 108px 0 0 0;
   height: 100%;
-  max-height: calc(100vh - 72px);
+  max-height: calc(100vh - 56px);
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
@@ -167,6 +168,7 @@ const View: NextPage = () => {
   return (
     <Container>
       <Header headerTitle="나눔목록" />
+
       <CategoryContainer>
         <CategoryList>
           {mockCategories.map((category) => (
@@ -184,6 +186,7 @@ const View: NextPage = () => {
           ))}
         </CategoryList>
       </CategoryContainer>
+
       <ItemList>
         {data.map((item) => (
           <LinkWrapper
