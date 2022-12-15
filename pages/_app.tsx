@@ -7,7 +7,6 @@ import type { AppProps } from 'next/app';
 import GlobalStyle from '../src/styles/globalStyle';
 import { theme } from '../src/styles/theme';
 
-
 const BodyInner = styled.div`
   display: flex;
   // flex-direction: column;
@@ -48,6 +47,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           <WebAppContainer>
             <Component {...pageProps} />
             <Script src="https://developers.kakao.com/sdk/js/kakao.js" onLoad={kakaoInit}></Script>
+            <Script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></Script>
           </WebAppContainer>
         </BodyInner>
       </ThemeProvider>
