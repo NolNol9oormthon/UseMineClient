@@ -99,6 +99,10 @@ const Home: NextPage = () => {
   const router = useRouter();
   const ref = useRef(null);
 
+  React.useEffect(() => {
+    import('@lottiefiles/lottie-player');
+  });
+
   console.log(router);
   let currentUrl = '';
   try {
