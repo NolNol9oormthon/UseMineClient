@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
 import styled from 'styled-components';
+
 import Header from '../../src/components/Header';
 import Item from '../../src/components/Item';
 
@@ -47,12 +48,6 @@ const mockItems = [
     avaliable_end_time: '13시 00분',
   },
 ];
-
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`;
 
 const CategoryList = styled.div`
   display: flex;
