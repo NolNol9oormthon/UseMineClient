@@ -8,20 +8,18 @@ import ChevronLeftWhite from '../../assets/icons/chevron-left-white.svg';
 import UserProfileOutline from '../../assets/icons/user-profile-outline.svg';
 
 const Container = styled.div<{ windowWidth: number; isDetailPage: boolean }>`
-  width: ${({ windowWidth }) => (windowWidth > 420 ? '420px' : `calc(100% + 40px)`)};
-  /* transform: ${({ windowWidth }) => (windowWidth > 420 ? `translateX(calc(-50%))` : null)}; */
+  width: ${({ windowWidth }) => (windowWidth > 420 ? '420px' : `calc(100%)`)};
   left: ${({ windowWidth }) => (windowWidth > 420 ? `calc(50% - 210px)` : 0)};
-  /* margin: 0 -20px; */
   max-width: 420px;
   height: 56px;
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
   align-items: center;
-  background-color: ${({ isDetailPage }) => (isDetailPage ? 'transparent' : null)};
+  background-color: ${({ isDetailPage, theme }) =>
+    isDetailPage ? 'transparent' : theme.colors.white};
   position: fixed;
   top: 0;
-  /* left: 0; */
   z-index: 10;
 `;
 
@@ -39,6 +37,10 @@ const DummyBox = styled.div`
   height: 32px;
 `;
 
+const Button = styled.button`
+  padding: 0;
+`;
+
 const Header = ({ headerTitle = '' }: { headerTitle: string }) => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const router = useRouter();
@@ -52,13 +54,13 @@ const Header = ({ headerTitle = '' }: { headerTitle: string }) => {
   return (
     <Container windowWidth={windowWidth} isDetailPage={isDetailPage}>
       {isDetailPage ? (
-        <button onClick={() => router.back()}>
+        <Button onClick={() => router.back()}>
           <ChevronLeftWhite />
-        </button>
+        </Button>
       ) : (
-        <button onClick={() => router.back()}>
+        <Button onClick={() => router.back()}>
           <ChevronLeftBlack />
-        </button>
+        </Button>
       )}
 
       {isDetailPage ? null : <Title>{headerTitle}</Title>}
