@@ -92,9 +92,9 @@ const ShareCard = () => {
           <Image src="https://menu.mt.co.kr/moneyweek/thumb/2022/02/04/06/2022020410348097173_1.jpg" />
         </ImageContainer>
         <TextContainer>
-          {state_id === ItemState.AVAILABLE ? (
+          {/* {state_id === ItemState.AVAILABLE ? (
             <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip>
-          ) : null}
+          ) : null} */}
           {/* {state_id === ItemState.RESERVED ? (
             <StateChip state={ItemState.RESERVED}>전달 중</StateChip>
           ) : null}
