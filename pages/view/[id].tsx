@@ -156,7 +156,7 @@ const Detail = () => {
   };
 
   const linkOnClick = (link: string) => {
-    router.push("https://open.kakao.com/o/ddfsdsfd");
+    router.push(link);
   };
 
   return (

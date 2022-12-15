@@ -102,6 +102,11 @@ const WriterSection = styled.div`
   align-items: center;
 `;
 
+const dateConverter = (date: string) => {
+  const value = date.slice(date.length - 8, date.length - 3);
+  return value;
+};
+
 const Item = ({
   state,
   itemName,
@@ -134,7 +139,7 @@ const Item = ({
           </WriterSection>
         </TextSection>
         <AvaliableTime state={state}>
-          {availableStartTime} ~ {availableEndTime}
+          {dateConverter(availableStartTime)} ~ {dateConverter(availableEndTime)}
         </AvaliableTime>
       </DescriptionSection>
     </Container>
