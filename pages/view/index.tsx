@@ -198,7 +198,7 @@ const View: NextPage = () => {
       <ItemList>
         <>
           {status === 'success' &&
-            data.pages.map((page) => {
+            data?.pages.map((page) => {
               return page.map((item: ItemProps) => (
                 <LinkWrapper
                   href={`/view/${item.itemId}`}
