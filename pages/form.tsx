@@ -13,6 +13,7 @@ import SouvenirIcon from '../assets/icons/souvenir.svg';
 import NecessitiesIcon from '../assets/icons/necessities.svg';
 import ClothesIcon from '../assets/icons/clothes.svg';
 import CheckIcon from '../assets/icons/check-white.svg';
+import { createItem } from '../src/apis/index';
 
 const Container = styled.div`
   width: 100%;
@@ -303,6 +304,21 @@ const ErrorComment = styled.div`
   color: #df0000;
 `;
 
+const dateConverter = (time: string) => {
+  const now = new Date();
+  const tmpList = String(now).split(':');
+  const reDate =
+    tmpList[0].slice(0, tmpList[0].length - 2) +
+    time +
+    ':00' +
+    tmpList[2].slice(2, tmpList[2].length);
+  const returnDate = new Date(Date.parse(reDate) + 32400000);
+  console.log(returnDate.toISOString());
+  const convertTime = returnDate.toISOString();
+
+  return convertTime.slice(0, convertTime.length - 5);
+};
+
 const Home: NextPage = () => {
   const [productImage, setProductImage] = useState<any | null>(null);
   const [productImageChange, setProductImageChange] = useState(false);
@@ -327,7 +343,7 @@ const Home: NextPage = () => {
       icon: ClothesIcon,
     },
     {
-      name: '생활 용품',
+      name: '생활용품',
       value: 'NECESSITIES',
       icon: NecessitiesIcon,
     },
@@ -337,8 +353,8 @@ const Home: NextPage = () => {
       icon: SouvenirIcon,
     },
     {
-      name: '전자 기기',
-      value: 'ELECTRONICS',
+      name: '할인권',
+      value: 'COUPON',
       icon: ElectronicsIcon,
     },
     {
@@ -348,6 +364,7 @@ const Home: NextPage = () => {
     },
   ];
 
+  const router = useRouter();
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
   const handleBgClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -411,6 +428,27 @@ const Home: NextPage = () => {
     }
   };
 
+  const doneOnClick = async () => {
+    // dateConverter(arriveTime);
+    const formData = new FormData();
+
+    if (productImage) {
+      formData.append('imageFile', productImage.file);
+    }
+    formData.append('availableEndTime', dateConverter(departTime));
+    formData.append('availableStartTime', dateConverter(arriveTime));
+    formData.append('category', CategoryList[categoryIdx].value);
+    formData.append('chatUrl', chatLink);
+    formData.append('content', description);
+    formData.append('itemName', productName);
+    formData.append('ownerId', String(localStorage.getItem('userId')));
+
+    const createItemResult = await createItem(formData).then((data) => {
+        console.log(data);
+        router.push('/view');
+    });
+  };
+
   return (
     <Container>
       {nextOn ? (
@@ -453,7 +491,7 @@ const Home: NextPage = () => {
             {errorComment ? <ErrorComment>{errorComment}</ErrorComment> : <></>}
           </LinkBox>
           {!errorComment && arriveTime && departTime && chatLink ? (
-            <NextButton onClick={() => setDone(true)} style={{ backgroundColor: '#5566FF' }}>
+            <NextButton onClick={() => doneOnClick()} style={{ backgroundColor: '#5566FF' }}>
               등록완료
             </NextButton>
           ) : (
