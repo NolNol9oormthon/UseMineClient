@@ -173,6 +173,10 @@ const Home: NextPage = () => {
     }
   }, [router.query]);
 
+  const formOnClick = () => {
+    router.push('/form');
+  };
+
   return (
     <Container>
       {userInfo?.id ? (
@@ -183,7 +187,7 @@ const Home: NextPage = () => {
             {userInfo?.nickname}님
           </MainText>
           <SemiText>같이가치를 위한 나눔을 시작해볼까요?</SemiText>
-          <RegisterButton>
+          <RegisterButton onClick={formOnClick}>
             <ButtonTextBlue>물품 등록하기</ButtonTextBlue>
             <ButtonIcon>
               <ChevronRightBlue />
