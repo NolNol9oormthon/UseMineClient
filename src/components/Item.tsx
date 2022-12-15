@@ -106,7 +106,12 @@ const Item = ({
   itemName,
   imageUrl,
   ownerNickname,
-}: Pick<ItemProps, 'state' | 'itemName' | 'imageUrl' | 'ownerNickname'>) => {
+  availableStartTime,
+  availableEndTime,
+}: Pick<
+  ItemProps,
+  'state' | 'itemName' | 'imageUrl' | 'ownerNickname' | 'availableStartTime' | 'availableEndTime'
+>) => {
   return (
     <Container>
       <ItemImage src={imageUrl} />
@@ -127,7 +132,9 @@ const Item = ({
             <Nickname>{ownerNickname}</Nickname>
           </WriterSection>
         </TextSection>
-        <AvaliableTime state={state}>12:00 ~ 13:00</AvaliableTime>
+        <AvaliableTime state={state}>
+          {availableStartTime} ~ {availableEndTime}
+        </AvaliableTime>
       </DescriptionSection>
     </Container>
   );

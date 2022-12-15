@@ -5,7 +5,6 @@ const LinkWrapper = ({
   children,
   href,
   isDisabled,
-  itemId,
   ...props
 }: {
   children: React.ReactNode;
@@ -17,13 +16,7 @@ const LinkWrapper = ({
     return <>{children}</>;
   }
   return (
-    <Link
-      href={{
-        pathname: href,
-        query: { itemId },
-      }}
-      {...props}
-    >
+    <Link href={href} {...props}>
       {children}
     </Link>
   );
