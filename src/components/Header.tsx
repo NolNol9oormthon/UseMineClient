@@ -6,14 +6,19 @@ import styled from 'styled-components';
 import ChevronLeftBlack from '../../assets/icons/chevron-left-black.svg';
 import UserProfileOutline from '../../assets/icons/user-profile-outline.svg';
 
-const Container = styled.div`
-  width: 100%;
+const Container = styled.div<{ isDetailPage: boolean }>`
+  width: calc(100% + 40px);
+  margin: 0 -20px;
   max-width: 420px;
   height: 56px;
   display: flex;
   justify-content: space-between;
-  padding: 12px 0;
+  padding: 12px 20px;
   align-items: center;
+  background-color: ${({ isDetailPage }) => (isDetailPage ? 'transparent' : null)};
+  position: fixed;
+  top: 0;
+  left: 0;
 `;
 
 const Title = styled.span`
@@ -25,10 +30,12 @@ const Title = styled.span`
   text-align: center;
 `;
 
-const Header = ({ headerTitle }: { headerTitle: string }) => {
+const Header = ({ headerTitle = '' }: { headerTitle: string }) => {
   const router = useRouter();
+  const isDetailPage = router.pathname === '/view/[id]';
+
   return (
-    <Container>
+    <Container isDetailPage={isDetailPage}>
       <button onClick={() => router.back()}>
         <ChevronLeftBlack />
       </button>
