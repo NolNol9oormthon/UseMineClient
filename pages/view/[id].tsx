@@ -111,12 +111,6 @@ const ButtonWhiteBackground = styled.div<{ windowWidth: number }>`
   left: ${({ windowWidth }) => (windowWidth > 420 ? `calc(50% - 210px)` : 0)};
   padding: 0 20px;
   padding-bottom: 40px;
-<<<<<<< HEAD
-  width: ${({ windowWidth }) => (windowWidth > 420 ? '380px' : `calc(100% - 20px)`)};
-  transform: ${({ windowWidth }) => (windowWidth > 420 ? `translateX(calc(50% + 100px))` : null)};
-  left: 20px;
-=======
->>>>>>> a6546c72169d91c846e836f2d991984622f83746
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
