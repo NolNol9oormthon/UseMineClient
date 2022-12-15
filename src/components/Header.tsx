@@ -32,9 +32,15 @@ const Title = styled.span`
   text-align: center;
 `;
 
+const DummyBox = styled.div`
+  width: 32px;
+  height: 32px;
+`;
+
 const Header = ({ headerTitle = '' }: { headerTitle: string }) => {
   const router = useRouter();
   const isDetailPage = router.pathname === '/view/[id]';
+  const isMypage = router.pathname === '/mypage';
 
   return (
     <Container isDetailPage={isDetailPage}>
@@ -50,7 +56,9 @@ const Header = ({ headerTitle = '' }: { headerTitle: string }) => {
 
       {isDetailPage ? null : <Title>{headerTitle}</Title>}
 
-      {isDetailPage ? null : (
+      {isDetailPage ? null : isMypage ? (
+        <DummyBox />
+      ) : (
         <Link href="/mypage">
           <UserProfileOutline />
         </Link>
