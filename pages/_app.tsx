@@ -1,7 +1,6 @@
 import Script from 'next/script';
 import styled, { ThemeProvider } from 'styled-components';
 import '../src/font/font.css';
-import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 
 import GlobalStyle from '../src/styles/globalStyle';

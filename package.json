@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write **/*.{ts,tsx}",
     "tsc": "tsc"
   },
   "dependencies": {
+
     "@lottiefiles/lottie-player": "^1.6.2",
     "@tanstack/react-query": "^4.20.2",
     "@types/node": "18.11.15",
@@ -34,10 +35,13 @@
     "yarn": "^1.22.19"
   },
   "devDependencies": {
+    "@svgr/webpack": "^6.5.1",
     "@types/qs": "^6.9.7",
     "@types/styled-components": "^5.1.26",
+    "add": "^2.0.6",
     "babel-plugin-styled-components": "^2.0.7",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1"
+    "eslint-plugin-prettier": "^4.2.1",
+    "yarn": "^1.22.19"
   }
 }

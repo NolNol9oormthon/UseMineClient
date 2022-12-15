@@ -4,10 +4,9 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import axios from 'axios';
 import qs from 'qs';
-import Image from 'next/image';
 
-import { ChevronRightBlue, ChevronRightOrange } from '../assets/icons';
-import * as LottiePlayer from '@lottiefiles/lottie-player';
+import ChevronRightBlue from '../assets/icons/chevron-right-blue.svg';
+import ChevronRightOrange from '../assets/icons/chevron-right-orange.svg';
 
 const Container = styled.div`
   width: 100%;
@@ -117,12 +116,12 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     console.log(router.query['code']);
-    let code = router.query['code'];
+    const code = router.query['code'];
 
     const getProfile = async () => {
       try {
         // Kakao SDK API를 이용해 사용자 정보 획득
-        let data = await window.Kakao.API.request({
+        const data = await window.Kakao.API.request({
           url: '/v2/user/me',
         });
         // 사용자 정보 변수에 저장
@@ -187,13 +186,13 @@ const Home: NextPage = () => {
           <RegisterButton>
             <ButtonTextBlue>물품 등록하기</ButtonTextBlue>
             <ButtonIcon>
-              <Image src={ChevronRightBlue} alt="/" width={24} height={24} />
+              <ChevronRightBlue />
             </ButtonIcon>
           </RegisterButton>
           <ViewButton>
             <ButtonTextOrange>둘러보기</ButtonTextOrange>
             <ButtonIcon>
-              <Image src={ChevronRightOrange} alt="/" width={24} height={24} />
+              <ChevronRightOrange />
             </ButtonIcon>
           </ViewButton>
         </>
