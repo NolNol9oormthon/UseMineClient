@@ -7,6 +7,7 @@ import UserProfileFill from '../../assets/icons/user-profile-fill.svg';
 import Header from '../../src/components/Header';
 import { ItemState } from '../../src/components/Item';
 import { getDetailData } from '../../src/apis';
+import Modal from '../../src/components/Modal';
 
 import { ItemProps } from '.';
 
@@ -134,6 +135,7 @@ interface ItemDetailProps extends ItemProps {
 const Detail = () => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const [data, setData] = useState<ItemDetailProps>();
+  const [reqOn, setReqOn] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -149,8 +151,30 @@ const Detail = () => {
     get();
   }, [id]);
 
+  const closeModal = () => {
+    setReqOn(false);
+  };
+
+  const linkOnClick = (link: string) => {
+    router.push("https://open.kakao.com/o/ddfsdsfd");
+  };
+
   return (
     <Container>
+      {reqOn ? (
+        <Modal
+          className="req_modal"
+          visible={reqOn}
+          maskClosable={true}
+          onClose={closeModal}
+          text="오픈 채팅방 이동"
+          subText="소통을 위한 카카오톡 오픈채팅방으로 바로 이동합니다"
+          buttonText="이동하기"
+          buttonOnClick={() => linkOnClick(String(data?.chatUrl))}
+        />
+      ) : (
+        <></>
+      )}
       <Header headerTitle="" />
       <ImageWrapper>
         <Image src={data?.imageUrl} alt={data?.itemName} />
@@ -177,7 +201,9 @@ const Detail = () => {
         <AbaliableTimeText>12:00 ~ 13:00</AbaliableTimeText>
       </AbaliableTimeSection>
       <ButtonWhiteBackground windowWidth={windowWidth}>
-        <Button windowWidth={windowWidth}>나눔 요청하기</Button>
+        <Button onClick={() => setReqOn(true)} windowWidth={windowWidth}>
+          나눔 요청하기
+        </Button>
       </ButtonWhiteBackground>
     </Container>
   );

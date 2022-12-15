@@ -180,6 +180,10 @@ const Home: NextPage = () => {
     router.push('/form');
   };
 
+  const viewOnClick = () => {
+    router.push('/view');
+  };
+
   return (
     <Container>
       {userInfo?.id ? (
@@ -196,7 +200,7 @@ const Home: NextPage = () => {
               <ChevronRightBlue />
             </ButtonIcon>
           </RegisterButton>
-          <ViewButton>
+          <ViewButton onClick={viewOnClick}>
             <ButtonTextOrange>둘러보기</ButtonTextOrange>
             <ButtonIcon>
               <ChevronRightOrange />

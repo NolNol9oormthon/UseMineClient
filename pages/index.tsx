@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import styled from 'styled-components';
+import JejuLogo from "../assets/icons/jeju-logo.svg";
 
 const Container = styled.div`
   width: 100%;
@@ -37,6 +38,7 @@ const LoginButton = styled.button`
 
 const Home: NextPage = () => {
   let currentUrl = ""
+
   try {
     if (!window) {
       currentUrl = "http://localhost:3000"
@@ -55,14 +57,11 @@ const Home: NextPage = () => {
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   }
+
   return (
     <Container>
       <ContentBox>
-        <LogoBox
-          src={
-            'https://png.pngtree.com/png-clipart/20221001/original/pngtree-welcome-to-jeju-island-korean-bear-hand-drawn-free-printable-png-image_8648942.png'
-          }
-        />
+        <JejuLogo />
       </ContentBox>
       <LoginButton onClick={handleLogin}>카카오로 시작하기</LoginButton>
     </Container>
