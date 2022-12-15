@@ -8,7 +8,7 @@ import axios from 'axios';
 import ChevronLeftBlack from '../assets/icons/chevron-left-black.svg';
 import CameraIcon from '../assets/icons/camera.svg';
 import FoodIcon from '../assets/icons/food.svg';
-import CouponIcon from '../assets/icons/coupon.svg';
+import CouponIcon from '../assets/icons/ticket.svg';
 import EtcIcon from '../assets/icons/etc.svg';
 import SouvenirIcon from '../assets/icons/souvenir.svg';
 import NecessitiesIcon from '../assets/icons/necessities.svg';
