@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
+
 import { UserProfileFill } from '../../assets/icons';
 import { ItemProps } from '../../pages/view';
 
