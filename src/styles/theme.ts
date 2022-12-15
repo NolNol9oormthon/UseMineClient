@@ -27,6 +27,9 @@ const colors = {
   tam_Orange50: '#FFF8F6',
   kakao_yellow: '#FFED4D',
   kakao_black: '#181600',
+  red_300: '#FD4444',
+  red_200: '#FF9F9F',
+  red_100: '#FFF6F6',
 };
 
 export type ColorsTypes = typeof colors;
