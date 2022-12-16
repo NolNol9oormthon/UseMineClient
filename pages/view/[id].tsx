@@ -125,6 +125,9 @@ const Button = styled.button<{ windowWidth: number }>`
   font-weight: 700;
   font-size: 16px;
   line-height: 18px;
+  :disabled {
+    background-color: ${({ theme }) => theme.colors.gray500};
+  }
 `;
 
 interface ItemDetailProps {
@@ -235,12 +238,8 @@ const Detail = () => {
         </AbaliableTimeText>
       </AbaliableTimeSection>
       <ButtonWhiteBackground windowWidth={windowWidth}>
-        <Button
-          onClick={() => setReqOn(true)}
-          disabled={data && data.owner}
-          windowWidth={windowWidth}
-        >
-          나눔 요청하기
+        <Button onClick={() => setReqOn(true)} disabled={data?.owner} windowWidth={windowWidth}>
+          {data?.owner ? '자신의 물품은 나눔받을 수 없어요' : '나눔 요청하기'}
         </Button>
       </ButtonWhiteBackground>
     </Container>

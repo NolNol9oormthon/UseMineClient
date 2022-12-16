@@ -39,7 +39,7 @@ const mockCategories = [
     component: () => <Necessities />,
   },
   {
-    category_id: 'ticket',
+    category_id: 'coupon',
     category_name: '할인권',
     component: () => <Ticket />,
   },

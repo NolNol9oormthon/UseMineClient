@@ -16,14 +16,6 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const ItemImage = styled(LazyLoadImage)`
-  display: flex;
-  min-width: 116px;
-  width: 116px;
-  height: 116px;
-  border-radius: 4px;
-`;
-
 const DescriptionSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -102,6 +94,24 @@ const WriterSection = styled.div`
   align-items: center;
 `;
 
+const ImageContainer = styled.div`
+  width: 116px;
+  height: 116px;
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 116px;
+`;
+
+const ItemImage = styled(LazyLoadImage)`
+  top: 0;
+  left: 0;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
+`;
+
 export const dateConverter = (date: string) => {
   const value = date.slice(date.length - 8, date.length - 3);
   return value;
@@ -120,7 +130,9 @@ const Item = ({
 >) => {
   return (
     <Container>
-      <ItemImage src={imageUrl} />
+      <ImageContainer>
+        <ItemImage src={imageUrl} />
+      </ImageContainer>
       <DescriptionSection>
         <TextSection>
           {state === ItemState.AVAILABLE ? (
