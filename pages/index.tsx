@@ -35,6 +35,10 @@ const LoginButton = styled.button`
   font-weight: 700;
   position: absolute;
   bottom: 40px;
+  font-family: NanumSquare Neo variable;
+  font-size: 18px;
+  font-weight: 700;
+  color: #181600;
 `;
 
 const Home: NextPage = () => {

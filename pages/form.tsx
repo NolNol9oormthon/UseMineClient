@@ -254,7 +254,7 @@ const LinkInputBox = styled.input`
   height: 50px;
   border-radius: 4px;
   color: ${(props) => props.theme.colors.gray900};
-  font-family: NanumSquare Neo;
+  font-family: NanumSquare Neo variable;
   font-size: 14px;
   font-weight: 700;
   line-height: 28px;
