@@ -18,10 +18,10 @@ const BodyInner = styled.div`
   // align-items: center;
   min-height: 100vh;
   background-color: ${(props) => props.theme.colors.gray100};
-  background-image: url("https://firebasestorage.googleapis.com/v0/b/usemine-6a464.appspot.com/o/dark-wall.png?alt=media&token=e3641be7-b50c-4f66-81b4-220ed52e51e9");
+  background-image: url("https://firebasestorage.googleapis.com/v0/b/usemine-6a464.appspot.com/o/Asset%201%404x%201.png?alt=media&token=68325147-1a92-4b62-8cdd-32a1df96db63");
   // background-image: url("https://firebasestorage.googleapis.com/v0/b/usemine-6a464.appspot.com/o/bright-wall.png?alt=media&token=e303e287-dfde-4d60-a422-809bf322c5dc");
   background-position: center;
-  background-size: cover;
+  background-size: fit;
   background-repeat: no-repeat;
 `;
 
