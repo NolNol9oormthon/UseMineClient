@@ -145,7 +145,7 @@ const Item = ({
             <StateChip state={ItemState.COMPLETE}>종료</StateChip>
           ) : null}
           <Name state={state}>
-            {itemName.length < 13 ? itemName : itemName.slice(0, 11) + '...'}
+            {itemName.length < 15 ? itemName : itemName.slice(0, 14) + '...'}
           </Name>
           <WriterSection>
             <UserProfileFill />
