@@ -469,7 +469,7 @@ const Home: NextPage = () => {
             </Header>
             <AirportTimeBox>
               <TimeSettingBox>
-                <TimeSettingTitle>공항 도착 시간</TimeSettingTitle>
+                <TimeSettingTitle>제주 공항 도착 시간</TimeSettingTitle>
                 <TimeInputBox
                   value={arriveTime}
                   onChange={(e) => arriveTimeOnChange(e)}
@@ -478,7 +478,7 @@ const Home: NextPage = () => {
               </TimeSettingBox>
               <PeriodMark>~</PeriodMark>
               <TimeSettingBox>
-                <TimeSettingTitle>공항 출발 시간</TimeSettingTitle>
+                <TimeSettingTitle>제주 공항 떠나는 시간</TimeSettingTitle>
                 <TimeInputBox
                   value={departTime}
                   onChange={(e) => {
