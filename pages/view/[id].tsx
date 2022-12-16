@@ -2,11 +2,12 @@ import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import UserProfileFill from '../../assets/icons/user-profile-fill.svg';
 import Header from '../../src/components/Header';
 import { dateConverter, ItemState } from '../../src/components/Item';
-import { getDetailData } from '../../src/apis';
+import { deleteItem, getDetailData, patchItem } from '../../src/apis';
 import Modal from '../../src/components/Modal';
 
 import { ItemProps } from '.';
@@ -126,15 +127,17 @@ const Button = styled.button<{ windowWidth: number }>`
   line-height: 18px;
 `;
 
-interface ItemDetailProps extends ItemProps {
+interface ItemDetailProps {
   chatUrl: string;
   content: string;
   owner: boolean;
 }
 
+type ExtendedProps = ItemDetailProps & ItemProps;
+
 const Detail = () => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
-  const [data, setData] = useState<ItemDetailProps>();
+  const [data, setData] = useState<ExtendedProps>({} as ExtendedProps);
   const [reqOn, setReqOn] = useState(false);
 
   const router = useRouter();
@@ -155,10 +158,31 @@ const Detail = () => {
     setReqOn(false);
   };
 
+  useEffect(() => {
+    return () => {
+      setReqOn(false);
+    };
+  }, []);
+
   const linkOnClick = (link: string) => {
     router.push(link);
   };
 
+  const queryClient = useQueryClient();
+
+  const { isLoading, mutate, mutateAsync } = useMutation(
+    ({ itemId, userId, state }: { itemId: number; userId: number; state?: string }) => {
+      if (state) return patchItem(itemId, userId, state);
+      return deleteItem(itemId, userId);
+    },
+    {
+      onSuccess: (variables, context) => {
+        return queryClient.invalidateQueries(['myData']);
+      },
+    },
+  );
+
+  console.log(data);
   return (
     <Container>
       {reqOn ? (
@@ -170,7 +194,14 @@ const Detail = () => {
           text="오픈 채팅방 이동"
           subText="소통을 위한 카카오톡 오픈채팅방으로 바로 이동합니다"
           buttonText="이동하기"
-          buttonOnClick={() => linkOnClick(String(data?.chatUrl))}
+          buttonOnClick={() => {
+            mutate({
+              itemId: data.itemId,
+              userId: Number(localStorage.getItem('userId')),
+              state: 'RESERVED',
+            });
+            linkOnClick(String(data?.chatUrl));
+          }}
         />
       ) : (
         <></>
@@ -199,12 +230,16 @@ const Detail = () => {
       <AbaliableTimeSection>
         나눔가능 시간
         <AbaliableTimeText>
-          {data && dateConverter(data.availableStartTime)} ~{' '}
-          {data && dateConverter(data.availableEndTime)}
+          {data && data.availableStartTime && dateConverter(data.availableStartTime)} ~{' '}
+          {data && data.availableEndTime && dateConverter(data.availableEndTime)}
         </AbaliableTimeText>
       </AbaliableTimeSection>
       <ButtonWhiteBackground windowWidth={windowWidth}>
-        <Button onClick={() => setReqOn(true)} windowWidth={windowWidth}>
+        <Button
+          onClick={() => setReqOn(true)}
+          disabled={data && data.owner}
+          windowWidth={windowWidth}
+        >
           나눔 요청하기
         </Button>
       </ButtonWhiteBackground>
