@@ -90,7 +90,7 @@ const LottieContainer = styled.div`
 `;
 
 const Home: NextPage = () => {
-  const [userInfo, setUserInfo] = useState({
+  const [userInfo, setUserInfo] = useState<any>({
     id: '',
     nickname: '',
   });
@@ -137,6 +137,7 @@ const Home: NextPage = () => {
           const loginResult = await login(data.id, data.properties.profile_image).then((data) => {
             console.log(data);
             localStorage.setItem('userId', data.id);
+            localStorage.setItem('nickname', data.nickname);
             setUserInfo(data);
           });
           // const returnData = {
@@ -164,14 +165,20 @@ const Home: NextPage = () => {
       });
       try {
         // access token 가져오기
-        const res = await axios.post('https://kauth.kakao.com/oauth/token', payload);
-
+        const res = await axios
+          .post('https://kauth.kakao.com/oauth/token', payload)
+        
         // access token 설정
         window.Kakao.Auth.setAccessToken(res.data.access_token);
         // history.replace('/profile');
         getProfile();
       } catch (err) {
         console.log(err);
+        const sendData = {
+          id: localStorage.getItem('userId'),
+          nickname: localStorage.getItem('nickname'),
+        };
+        setUserInfo(sendData);
       }
     };
 
