@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import UserProfileFill from '../../assets/icons/user-profile-fill.svg';
 import Header from '../../src/components/Header';
-import { ItemState } from '../../src/components/Item';
+import { dateConverter, ItemState } from '../../src/components/Item';
 import { getDetailData } from '../../src/apis';
 import Modal from '../../src/components/Modal';
 
@@ -198,7 +198,10 @@ const Detail = () => {
       </TextSection>
       <AbaliableTimeSection>
         나눔가능 시간
-        <AbaliableTimeText>12:00 ~ 13:00</AbaliableTimeText>
+        <AbaliableTimeText>
+          {data && dateConverter(data.availableStartTime)} ~{' '}
+          {data && dateConverter(data.availableEndTime)}
+        </AbaliableTimeText>
       </AbaliableTimeSection>
       <ButtonWhiteBackground windowWidth={windowWidth}>
         <Button onClick={() => setReqOn(true)} windowWidth={windowWidth}>

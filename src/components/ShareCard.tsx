@@ -1,6 +1,11 @@
+// import { useRecoilState } from 'recoil';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 
+import { MyDataProps } from '../../pages/mypage';
 import { ItemProps } from '../../pages/view';
+import { deleteItem, patchItem } from '../apis';
+import { myDataState } from '../atom';
 import { ItemState } from './Item';
 
 const Container = styled.div<{ isAvailable: boolean; isReserved: boolean; isComplete: boolean }>`
@@ -83,8 +88,8 @@ const ButtonSection = styled.div`
 const CancelButton = styled.button`
   border-radius: 8px;
   width: 50%;
-  background-color: ${({ theme }) => theme.colors.tam_Orange100};
-  color: ${({ theme }) => theme.colors.tam_Orange500};
+  background-color: ${({ theme }) => theme.colors.tam_blue100};
+  color: ${({ theme }) => theme.colors.tam_blue400};
   font-weight: 700;
   font-size: 12px;
   line-height: 14px;
@@ -93,7 +98,7 @@ const CancelButton = styled.button`
 const CompleteButton = styled.button`
   border-radius: 8px;
   width: 50%;
-  background-color: ${({ theme }) => theme.colors.tam_Orange500};
+  background-color: ${({ theme }) => theme.colors.tam_blue500};
   color: ${({ theme }) => theme.colors.white};
   font-weight: 700;
   font-size: 12px;
@@ -103,8 +108,9 @@ const CompleteButton = styled.button`
 const LongCancelButton = styled.button`
   border-radius: 8px;
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.tam_blue100};
-  color: ${({ theme }) => theme.colors.tam_blue400};
+  background-color: ${({ theme }) => theme.colors.tam_Orange100};
+  color: ${({ theme }) => theme.colors.tam_Orange500};
+
   font-weight: 700;
   font-size: 12px;
   line-height: 14px;
@@ -114,10 +120,36 @@ const ShareCard = ({
   imageUrl,
   itemName,
   state,
-}: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state'>) => {
+  itemId,
+}: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state' | 'itemId'>) => {
+  // const [data, setData] = useRecoilState<MyDataProps>(myDataState);
+  const queryClient = useQueryClient();
   const isAvailable = state === ItemState.AVAILABLE;
   const isReserved = state === ItemState.RESERVED;
   const isComplete = state === ItemState.COMPLETE;
+
+  const { data, isLoading, mutate, mutateAsync } = useMutation(
+    ({ itemId, userId, state }: { itemId: number; userId: number; state?: string }) => {
+      if (state) return patchItem(itemId, userId, state);
+      return deleteItem(itemId, userId);
+    },
+    {
+      onSuccess: (data, variables, context) => {
+        return queryClient.invalidateQueries(['myData']);
+      },
+    },
+  );
+
+  const handleDelete = () => {
+    mutate({ itemId, userId: Number(localStorage.getItem('userId')) });
+  };
+  const handleComplete = () => {
+    mutate({ itemId, userId: Number(localStorage.getItem('userId')), state: 'COMPLETE' });
+  };
+
+  const handleReopen = () => {
+    mutate({ itemId, userId: Number(localStorage.getItem('userId')), state: 'AVAILABLE' });
+  };
 
   return (
     <Container isAvailable={isAvailable} isReserved={isReserved} isComplete={isComplete}>
@@ -127,20 +159,40 @@ const ShareCard = ({
         </ImageContainer>
         <TextContainer>
           {isAvailable ? <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip> : null}
-          {isReserved ? <StateChip state={ItemState.RESERVED}>전달 중</StateChip> : null}
-          {isComplete ? <StateChip state={ItemState.COMPLETE}>종료</StateChip> : null}
+          {isReserved ? <StateChip state={ItemState.RESERVED}>나눔 예약</StateChip> : null}
+          {isComplete ? <StateChip state={ItemState.COMPLETE}>나눔 완료</StateChip> : null}
           <Name state={state}>{itemName}</Name>
         </TextContainer>
       </ItemSection>
       {isComplete ? null : (
         <ButtonSection>
-          {isAvailable ? (
+          {isReserved ? (
             <>
-              <CancelButton>나눔 취소</CancelButton>
-              <CompleteButton>나눔 완료</CompleteButton>
+              <CancelButton
+                onClick={() => {
+                  handleReopen();
+                }}
+              >
+                나눔 취소
+              </CancelButton>
+              <CompleteButton
+                onClick={() => {
+                  handleComplete();
+                }}
+              >
+                나눔 완료
+              </CompleteButton>
             </>
           ) : null}
-          {isReserved ? <LongCancelButton>나눔 취소</LongCancelButton> : null}
+          {isAvailable ? (
+            <LongCancelButton
+              onClick={() => {
+                handleDelete();
+              }}
+            >
+              나눔 취소
+            </LongCancelButton>
+          ) : null}
         </ButtonSection>
       )}
     </Container>
