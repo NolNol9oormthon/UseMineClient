@@ -11,6 +11,7 @@ import { getMyData } from '../src/apis';
 import { ItemProps } from './view';
 import { ItemState } from '../src/components/Item';
 import { myDataState } from '../src/atom';
+import Seo from '../src/components/Seo';
 
 enum TAB {
   COMPLETED = 'COMPLETED',
@@ -125,6 +126,7 @@ const Mypage: NextPage = () => {
 
   return (
     <>
+      <Seo title="Mypage" />
       <Header headerTitle="내 정보" />
       <TabSection windowWidth={windowWidth}>
         <TabMenu>

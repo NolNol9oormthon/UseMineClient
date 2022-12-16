@@ -9,6 +9,7 @@ import Header from '../../src/components/Header';
 import { dateConverter, ItemState } from '../../src/components/Item';
 import { deleteItem, getDetailData, patchItem } from '../../src/apis';
 import Modal from '../../src/components/Modal';
+import Seo from '../../src/components/Seo';
 
 import { ItemProps } from '.';
 
@@ -187,62 +188,65 @@ const Detail = () => {
 
   console.log(data);
   return (
-    <Container>
-      {reqOn ? (
-        <Modal
-          className="req_modal"
-          visible={reqOn}
-          maskClosable={true}
-          onClose={closeModal}
-          text="오픈 채팅방 이동"
-          subText="소통을 위한 카카오톡 오픈채팅방으로 바로 이동합니다"
-          buttonText="이동하기"
-          buttonOnClick={() => {
-            mutate({
-              itemId: data.itemId,
-              userId: Number(localStorage.getItem('userId')),
-              state: 'RESERVED',
-            });
-            linkOnClick(String(data?.chatUrl));
-          }}
-        />
-      ) : (
-        <></>
-      )}
-      <Header headerTitle="" />
-      <ImageWrapper>
-        <Image src={data?.imageUrl} alt={data?.itemName} />
-      </ImageWrapper>
-      <WriterSection>
-        <UserProfileFill />
-        <Nickname>{data?.ownerNickname}</Nickname>
-      </WriterSection>
-      <TextSection>
-        {data?.state === ItemState.AVAILABLE ? (
-          <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip>
-        ) : null}
-        {data?.state === ItemState.RESERVED ? (
-          <StateChip state={ItemState.RESERVED}>전달 중</StateChip>
-        ) : null}
-        {data?.state === ItemState.COMPLETE ? (
-          <StateChip state={ItemState.COMPLETE}>종료</StateChip>
-        ) : null}
-        <Title>{data?.itemName}</Title>
-        <Description>{data?.content}</Description>
-      </TextSection>
-      <AbaliableTimeSection>
-        나눔가능 시간
-        <AbaliableTimeText>
-          {data && data.availableStartTime && dateConverter(data.availableStartTime)} ~{' '}
-          {data && data.availableEndTime && dateConverter(data.availableEndTime)}
-        </AbaliableTimeText>
-      </AbaliableTimeSection>
-      <ButtonWhiteBackground windowWidth={windowWidth}>
-        <Button onClick={() => setReqOn(true)} disabled={data?.owner} windowWidth={windowWidth}>
-          {data?.owner ? '자신의 물품은 나눔받을 수 없어요' : '나눔 요청하기'}
-        </Button>
-      </ButtonWhiteBackground>
-    </Container>
+    <>
+      <Seo title="Detail" />
+      <Container>
+        {reqOn ? (
+          <Modal
+            className="req_modal"
+            visible={reqOn}
+            maskClosable={true}
+            onClose={closeModal}
+            text="오픈 채팅방 이동"
+            subText="소통을 위한 카카오톡 오픈채팅방으로 바로 이동합니다"
+            buttonText="이동하기"
+            buttonOnClick={() => {
+              mutate({
+                itemId: data.itemId,
+                userId: Number(localStorage.getItem('userId')),
+                state: 'RESERVED',
+              });
+              linkOnClick(String(data?.chatUrl));
+            }}
+          />
+        ) : (
+          <></>
+        )}
+        <Header headerTitle="" />
+        <ImageWrapper>
+          <Image src={data?.imageUrl} alt={data?.itemName} />
+        </ImageWrapper>
+        <WriterSection>
+          <UserProfileFill />
+          <Nickname>{data?.ownerNickname}</Nickname>
+        </WriterSection>
+        <TextSection>
+          {data?.state === ItemState.AVAILABLE ? (
+            <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip>
+          ) : null}
+          {data?.state === ItemState.RESERVED ? (
+            <StateChip state={ItemState.RESERVED}>전달 중</StateChip>
+          ) : null}
+          {data?.state === ItemState.COMPLETE ? (
+            <StateChip state={ItemState.COMPLETE}>종료</StateChip>
+          ) : null}
+          <Title>{data?.itemName}</Title>
+          <Description>{data?.content}</Description>
+        </TextSection>
+        <AbaliableTimeSection>
+          나눔가능 시간
+          <AbaliableTimeText>
+            {data && data.availableStartTime && dateConverter(data.availableStartTime)} ~{' '}
+            {data && data.availableEndTime && dateConverter(data.availableEndTime)}
+          </AbaliableTimeText>
+        </AbaliableTimeSection>
+        <ButtonWhiteBackground windowWidth={windowWidth}>
+          <Button onClick={() => setReqOn(true)} disabled={data?.owner} windowWidth={windowWidth}>
+            {data?.owner ? '자신의 물품은 나눔받을 수 없어요' : '나눔 요청하기'}
+          </Button>
+        </ButtonWhiteBackground>
+      </Container>
+    </>
   );
 };
 

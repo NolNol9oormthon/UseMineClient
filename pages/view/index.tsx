@@ -16,6 +16,7 @@ import Souvenir from '../../assets/icons/souvenir_orange.svg';
 import Etc from '../../assets/icons/etc_orange.svg';
 import { getAllData } from '../../src/apis';
 import useObserver from '../../src/hooks/useObserver';
+import Seo from '../../src/components/Seo';
 
 const mockCategories = [
   {
@@ -173,43 +174,46 @@ const View: NextPage = () => {
   };
 
   return (
-    <Container>
-      <Header headerTitle="나눔목록" />
-      <CategoryContainer>
-        <CategoryList>
-          {mockCategories.map((category) => (
-            <ChipWrapper key={category.category_id}>
-              {clickedCategoryChip === category.category_id ? <StyledCheck /> : null}
-              <CategoryChip
-                onClick={() => {
-                  handelCategoryChipClick(category.category_id);
-                }}
-              >
-                {category.component()}
-              </CategoryChip>
-              <CategoryName>{category.category_name}</CategoryName>
-            </ChipWrapper>
-          ))}
-        </CategoryList>
-      </CategoryContainer>
-      <ItemList>
-        <>
-          {status === 'success' &&
-            data?.pages.map((page) => {
-              return page.map((item: ItemProps) => (
-                <LinkWrapper
-                  href={`/view/${item.itemId}`}
-                  isDisabled={item.state === ItemState.COMPLETE}
-                  key={item.itemId}
+    <>
+      <Seo title="List" />
+      <Container>
+        <Header headerTitle="나눔목록" />
+        <CategoryContainer>
+          <CategoryList>
+            {mockCategories.map((category) => (
+              <ChipWrapper key={category.category_id}>
+                {clickedCategoryChip === category.category_id ? <StyledCheck /> : null}
+                <CategoryChip
+                  onClick={() => {
+                    handelCategoryChipClick(category.category_id);
+                  }}
                 >
-                  <Item {...item} />
-                </LinkWrapper>
-              ));
-            })}
-        </>
-        <div ref={setTarget}></div>
-      </ItemList>
-    </Container>
+                  {category.component()}
+                </CategoryChip>
+                <CategoryName>{category.category_name}</CategoryName>
+              </ChipWrapper>
+            ))}
+          </CategoryList>
+        </CategoryContainer>
+        <ItemList>
+          <>
+            {status === 'success' &&
+              data?.pages.map((page) => {
+                return page.map((item: ItemProps) => (
+                  <LinkWrapper
+                    href={`/view/${item.itemId}`}
+                    isDisabled={item.state === ItemState.COMPLETE}
+                    key={item.itemId}
+                  >
+                    <Item {...item} />
+                  </LinkWrapper>
+                ));
+              })}
+          </>
+          <div ref={setTarget}></div>
+        </ItemList>
+      </Container>
+    </>
   );
 };
 
