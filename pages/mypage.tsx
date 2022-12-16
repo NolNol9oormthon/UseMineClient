@@ -40,6 +40,7 @@ const Tab = styled.button<{ isHighlight: boolean }>`
   font-size: 16px;
   line-height: 18px;
   width: 50%;
+  color: ${({ theme }) => theme.colors.gray500};
   border-bottom: ${({ isHighlight, theme }) =>
     isHighlight ? `2px solid ${theme.colors.tam_Orange500}` : `2px solid transparent`};
 `;
