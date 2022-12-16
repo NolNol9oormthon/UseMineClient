@@ -186,7 +186,7 @@ const Detail = () => {
     },
   );
 
-  console.log(data);
+  console.log(ItemState.RESERVED);
   return (
     <>
       <Seo title="Detail" />
@@ -241,8 +241,16 @@ const Detail = () => {
           </AbaliableTimeText>
         </AbaliableTimeSection>
         <ButtonWhiteBackground windowWidth={windowWidth}>
-          <Button onClick={() => setReqOn(true)} disabled={data?.owner} windowWidth={windowWidth}>
-            {data?.owner ? '자신의 물품은 나눔받을 수 없어요' : '나눔 요청하기'}
+          <Button
+            onClick={() => setReqOn(true)}
+            disabled={data?.owner || data?.state === 'RESERVED'}
+            windowWidth={windowWidth}
+          >
+            {data?.owner
+              ? '자신의 물품은 나눔받을 수 없어요'
+              : data?.state === 'RESERVED'
+              ? '이미 나눔이 예정된 물품이에요'
+              : '나눔 요청하기'}
           </Button>
         </ButtonWhiteBackground>
       </Container>
