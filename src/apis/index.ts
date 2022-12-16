@@ -89,7 +89,7 @@ export const deleteItem = async (itemId: number, userId: number) => {
   try {
     const response = await axios({
       method: 'DELETE',
-      url: process.env.NEXT_PUBLIC_DB_HOST + `/${itemId}`,
+      url: process.env.NEXT_PUBLIC_DB_HOST + `/items/${itemId}`,
       headers: { contentType: 'application/json', 'Logined-User': userId },
     });
 
@@ -103,7 +103,7 @@ export const patchItem = async (itemId: number, userId: number, state: string) =
   try {
     const response = await axios({
       method: 'PATCH',
-      url: process.env.NEXT_PUBLIC_DB_HOST + `/${itemId}`,
+      url: process.env.NEXT_PUBLIC_DB_HOST + `/items/${itemId}`,
       params: { state },
       headers: { contentType: 'application/json', 'Logined-User': userId },
     });
