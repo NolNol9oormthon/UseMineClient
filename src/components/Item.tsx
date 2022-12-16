@@ -139,7 +139,8 @@ const Item = ({
           </WriterSection>
         </TextSection>
         <AvaliableTime state={state}>
-          {dateConverter(availableStartTime)} ~ {dateConverter(availableEndTime)}
+          {availableStartTime && dateConverter(availableStartTime)} ~{' '}
+          {availableEndTime && dateConverter(availableEndTime)}
         </AvaliableTime>
       </DescriptionSection>
     </Container>
