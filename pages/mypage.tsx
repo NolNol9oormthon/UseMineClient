@@ -1,6 +1,8 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { useQuery } from '@tanstack/react-query';
 
 import Header from '../src/components/Header';
 import ShareCard from '../src/components/ShareCard';
@@ -8,6 +10,7 @@ import Checkbox from '../assets/icons/checkbox.svg';
 import { getMyData } from '../src/apis';
 import { ItemProps } from './view';
 import { ItemState } from '../src/components/Item';
+import { myDataState } from '../src/atom';
 
 enum TAB {
   COMPLETED = 'COMPLETED',
@@ -91,16 +94,16 @@ const StyledCheckBox = styled(Checkbox)<{ $isChecked: boolean }>`
   opacity: ${({ $isChecked }) => ($isChecked ? 1 : 0.5)};
 `;
 
-interface MyDataProps {
+export interface MyDataProps {
   completedItems: Pick<ItemProps, 'imageUrl' | 'itemId' | 'itemName' | 'state'>[];
   notCompletedItems: Pick<ItemProps, 'imageUrl' | 'itemId' | 'itemName' | 'state'>[];
 }
 
 const Mypage: NextPage = () => {
-  const [tab, setTab] = useState<TAB>(TAB.COMPLETED);
+  const [tab, setTab] = useState<TAB>(TAB.NOTCOMPLETED);
   const [isChecked, setIsChecked] = useState(false);
-  const [data, setData] = useState<MyDataProps>();
   const [windowWidth, setWindowWidth] = useState<number>(0);
+  const [myData, setMyData] = useRecoilState<MyDataProps>(myDataState);
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
@@ -111,12 +114,14 @@ const Mypage: NextPage = () => {
     if (tab === TAB.NOTCOMPLETED) setTab(TAB.COMPLETED);
   };
 
-  useEffect(() => {
-    const get = () => {
-      getMyData(Number(localStorage.getItem('userId'))).then((res) => setData(res));
-    };
-    get();
-  }, []);
+  const { data } = useQuery(['myData'], () => getMyData(Number(localStorage.getItem('userId'))));
+
+  // useEffect(() => {
+  //   const get = () => {
+  //     getMyData(Number(localStorage.getItem('userId'))).then((res) => setData(res));
+  //   };
+  //   get();
+  // }, []);
 
   return (
     <>
@@ -160,13 +165,28 @@ const Mypage: NextPage = () => {
         ) : null}
 
         {tab === TAB.COMPLETED
-          ? data && data.completedItems.map((item) => <ShareCard key={item.itemId} {...item} />)
+          ? data &&
+            data.completedItems.map(
+              (item: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state' | 'itemId'>) => (
+                <ShareCard key={item.itemId} {...item} />
+              ),
+            )
           : isChecked
           ? data &&
             data.notCompletedItems
-              .filter((item) => item.state === ItemState.AVAILABLE)
-              .map((item) => <ShareCard key={item.itemId} {...item} />)
-          : data && data.notCompletedItems.map((item) => <ShareCard key={item.itemId} {...item} />)}
+              .filter(
+                (item: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state' | 'itemId'>) =>
+                  item.state === ItemState.AVAILABLE,
+              )
+              .map((item: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state' | 'itemId'>) => (
+                <ShareCard key={item.itemId} {...item} />
+              ))
+          : data &&
+            data.notCompletedItems.map(
+              (item: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state' | 'itemId'>) => (
+                <ShareCard key={item.itemId} {...item} />
+              ),
+            )}
       </Contents>
     </>
   );

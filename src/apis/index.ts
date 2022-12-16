@@ -6,7 +6,7 @@ export const getAllData = async (category: string, cursorId: number) => {
       method: 'get',
       url: `${process.env.NEXT_PUBLIC_DB_HOST}/items`,
       params: { category, cursorId },
-      headers: { contentType: 'application/json', 'Logined-User': 999 },
+      headers: { contentType: 'application/json' },
     });
 
     return response.data;
@@ -21,7 +21,10 @@ export const getDetailData = async (id: number) => {
     const response = await axios({
       method: 'get',
       url: `${process.env.NEXT_PUBLIC_DB_HOST}/items/${id}`,
-      headers: { contentType: 'application/json', 'Logined-User': 999 },
+      headers: {
+        contentType: 'application/json',
+        'Logined-User': Number(localStorage.getItem('userId')),
+      },
     });
     return response.data;
   } catch (error) {
@@ -72,7 +75,36 @@ export const getMyData = async (userId: number) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://3.34.62.141:58287//my-items',
+      url: `http://3.34.62.141:58287/my-items`,
+      headers: { contentType: 'application/json', 'Logined-User': userId },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.dir(error);
+  }
+};
+
+export const deleteItem = async (itemId: number, userId: number) => {
+  try {
+    const response = await axios({
+      method: 'DELETE',
+      url: `http://3.34.62.141:58287/items/${itemId}`,
+      headers: { contentType: 'application/json', 'Logined-User': userId },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.dir(error);
+  }
+};
+
+export const patchItem = async (itemId: number, userId: number, state: string) => {
+  try {
+    const response = await axios({
+      method: 'PATCH',
+      url: `http://3.34.62.141:58287/items/${itemId}`,
+      params: { state },
       headers: { contentType: 'application/json', 'Logined-User': userId },
     });
 
