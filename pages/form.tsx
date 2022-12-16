@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { createHashRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 
 import ChevronLeftBlack from '../assets/icons/chevron-left-black.svg';
 import CameraIcon from '../assets/icons/camera.svg';

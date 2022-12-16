@@ -8,8 +8,6 @@ import { RecoilRoot } from 'recoil';
 
 import GlobalStyle from '../src/styles/globalStyle';
 import { theme } from '../src/styles/theme';
-import BrightWall from '../assets/images/bright-wall.png';
-import DarkWall from '../assets/images/dark-wall.png';
 
 const BodyInner = styled.div`
   display: flex;
@@ -18,7 +16,7 @@ const BodyInner = styled.div`
   // align-items: center;
   min-height: 100vh;
   background-color: ${(props) => props.theme.colors.gray100};
-  background-image: url("https://firebasestorage.googleapis.com/v0/b/usemine-6a464.appspot.com/o/Asset%201%404x%201.png?alt=media&token=68325147-1a92-4b62-8cdd-32a1df96db63");
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/usemine-6a464.appspot.com/o/Asset%201%404x%201.png?alt=media&token=68325147-1a92-4b62-8cdd-32a1df96db63');
   // background-image: url("https://firebasestorage.googleapis.com/v0/b/usemine-6a464.appspot.com/o/bright-wall.png?alt=media&token=e303e287-dfde-4d60-a422-809bf322c5dc");
   background-position: center;
   background-size: fit;
