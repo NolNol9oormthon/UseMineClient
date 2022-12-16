@@ -144,7 +144,9 @@ const Item = ({
           {state === ItemState.COMPLETE ? (
             <StateChip state={ItemState.COMPLETE}>종료</StateChip>
           ) : null}
-          <Name state={state}>{itemName}</Name>
+          <Name state={state}>
+            {itemName.length < 16 ? itemName : itemName.slice(0, 15) + '...'}
+          </Name>
           <WriterSection>
             <UserProfileFill />
             <Nickname>{ownerNickname}</Nickname>
