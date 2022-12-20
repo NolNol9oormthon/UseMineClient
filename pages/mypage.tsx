@@ -1,7 +1,6 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
 import { useQuery } from '@tanstack/react-query';
 
 import Header from '../src/components/Header';
@@ -10,7 +9,6 @@ import Checkbox from '../assets/icons/checkbox.svg';
 import { getMyData } from '../src/apis';
 import { ItemProps } from './view';
 import { ItemState } from '../src/components/Item';
-import { myDataState } from '../src/atom';
 import Seo from '../src/components/Seo';
 
 enum TAB {
@@ -105,7 +103,6 @@ const Mypage: NextPage = () => {
   const [tab, setTab] = useState<TAB>(TAB.NOTCOMPLETED);
   const [isChecked, setIsChecked] = useState(false);
   const [windowWidth, setWindowWidth] = useState<number>(0);
-  const [myData, setMyData] = useRecoilState<MyDataProps>(myDataState);
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
@@ -117,13 +114,6 @@ const Mypage: NextPage = () => {
   };
 
   const { data } = useQuery(['myData'], () => getMyData(Number(localStorage.getItem('userId'))));
-
-  // useEffect(() => {
-  //   const get = () => {
-  //     getMyData(Number(localStorage.getItem('userId'))).then((res) => setData(res));
-  //   };
-  //   get();
-  // }, []);
 
   return (
     <>

@@ -4,7 +4,6 @@ import '../src/font/font.css';
 import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
-import { RecoilRoot } from 'recoil';
 
 import GlobalStyle from '../src/styles/globalStyle';
 import { theme } from '../src/styles/theme';
@@ -54,9 +53,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <BodyInner>
           <WebAppContainer>
             <QueryClientProvider client={queryClient}>
-              <RecoilRoot>
-                <Component {...pageProps} />
-              </RecoilRoot>
+              <Component {...pageProps} />
             </QueryClientProvider>
             <Script src="https://developers.kakao.com/sdk/js/kakao.js" onLoad={kakaoInit}></Script>
           </WebAppContainer>

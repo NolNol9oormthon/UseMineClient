@@ -1,4 +1,3 @@
-import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
@@ -174,14 +173,13 @@ const Detail = () => {
 
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate, mutateAsync } = useMutation(
+  const { mutate } = useMutation(
     ({ itemId, userId, state }: { itemId: number; userId: number; state?: string }) => {
-      if (state)
-        return patchItem(itemId, userId, state)
+      if (state) return patchItem(itemId, userId, state);
       return deleteItem(itemId, userId);
     },
     {
-      onSuccess: (variables, context) => {
+      onSuccess: () => {
         return queryClient.invalidateQueries(['myData']);
       },
     },
