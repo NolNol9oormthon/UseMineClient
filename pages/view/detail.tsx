@@ -145,7 +145,7 @@ const Detail = () => {
   const [reqOn, setReqOn] = useState(false);
 
   const router = useRouter();
-  const { id } = router.query;
+  const { itemId } = router.query;
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
@@ -153,10 +153,10 @@ const Detail = () => {
 
   useEffect(() => {
     const get = async () => {
-      getDetailData(Number(id)).then((res) => setData(res));
+      getDetailData(Number(itemId)).then((res) => setData(res));
     };
     get();
-  }, [id]);
+  }, [itemId]);
 
   const closeModal = () => {
     setReqOn(false);
