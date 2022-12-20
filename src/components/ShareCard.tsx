@@ -1,11 +1,8 @@
-// import { useRecoilState } from 'recoil';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import { MyDataProps } from '../../pages/mypage';
 import { ItemProps } from '../../pages/view';
 import { deleteItem, patchItem } from '../apis';
-import { myDataState } from '../atom';
 import { ItemState } from './Item';
 
 const Container = styled.div<{ isAvailable: boolean; isReserved: boolean; isComplete: boolean }>`
@@ -122,19 +119,18 @@ const ShareCard = ({
   state,
   itemId,
 }: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state' | 'itemId'>) => {
-  // const [data, setData] = useRecoilState<MyDataProps>(myDataState);
   const queryClient = useQueryClient();
   const isAvailable = state === ItemState.AVAILABLE;
   const isReserved = state === ItemState.RESERVED;
   const isComplete = state === ItemState.COMPLETE;
 
-  const { data, isLoading, mutate, mutateAsync } = useMutation(
+  const { mutate } = useMutation(
     ({ itemId, userId, state }: { itemId: number; userId: number; state?: string }) => {
       if (state) return patchItem(itemId, userId, state);
       return deleteItem(itemId, userId);
     },
     {
-      onSuccess: (data, variables, context) => {
+      onSuccess: () => {
         return queryClient.invalidateQueries(['myData']);
       },
     },
@@ -155,7 +151,7 @@ const ShareCard = ({
     <Container isAvailable={isAvailable} isReserved={isReserved} isComplete={isComplete}>
       <ItemSection>
         <ImageContainer>
-          <Image src={imageUrl} />
+          <Image src={imageUrl} alt={itemName} />
         </ImageContainer>
         <TextContainer>
           {isAvailable ? <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip> : null}

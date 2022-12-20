@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -153,7 +153,7 @@ export interface ItemProps {
 const View: NextPage = () => {
   const [clickedCategoryChip, setClickedCategoryChip] = useState<string>('all');
 
-  const { data, fetchNextPage, hasNextPage, status } = useInfiniteQuery(
+  const { data, fetchNextPage, status } = useInfiniteQuery(
     ['infiniteDatas', clickedCategoryChip],
     ({ pageParam = 0 }) => getAllData(clickedCategoryChip, pageParam),
     {
