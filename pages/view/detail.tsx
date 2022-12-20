@@ -186,7 +186,6 @@ const Detail = () => {
     },
   );
 
-  console.log(ItemState.RESERVED);
   return (
     <>
       <Seo title="Detail" />
@@ -201,12 +200,18 @@ const Detail = () => {
             subText="소통을 위한 카카오톡 오픈채팅방으로 바로 이동합니다"
             buttonText="이동하기"
             buttonOnClick={() => {
-              mutate({
-                itemId: data.itemId,
-                userId: Number(localStorage.getItem('userId')),
-                state: 'RESERVED',
-              });
-              linkOnClick(String(data?.chatUrl));
+              mutate(
+                {
+                  itemId: data.itemId,
+                  userId: Number(localStorage.getItem('userId')),
+                  state: 'RESERVED',
+                },
+                {
+                  onSettled: (data, variables, context) => {
+                    linkOnClick(String(data?.chatUrl));
+                  },
+                },
+              );
             }}
           />
         ) : (
