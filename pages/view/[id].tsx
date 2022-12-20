@@ -155,7 +155,9 @@ const Detail = () => {
     const get = async () => {
       getDetailData(Number(id)).then((res) => setData(res));
     };
-    get();
+    if (id) {
+      get();
+    }
   }, [id]);
 
   const closeModal = () => {
@@ -176,7 +178,10 @@ const Detail = () => {
 
   const { isLoading, mutate, mutateAsync } = useMutation(
     ({ itemId, userId, state }: { itemId: number; userId: number; state?: string }) => {
-      if (state) return patchItem(itemId, userId, state);
+      if (state)
+        return patchItem(itemId, userId, state).then(() => {
+          linkOnClick(String(data?.chatUrl));
+        });
       return deleteItem(itemId, userId);
     },
     {
@@ -206,7 +211,6 @@ const Detail = () => {
                 userId: Number(localStorage.getItem('userId')),
                 state: 'RESERVED',
               });
-              linkOnClick(String(data?.chatUrl));
             }}
           />
         ) : (
