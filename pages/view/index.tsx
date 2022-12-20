@@ -201,7 +201,7 @@ const View: NextPage = () => {
               data?.pages.map((page) => {
                 return page.map((item: ItemProps) => (
                   <LinkWrapper
-                    href={`/view/${item.itemId}`}
+                    href={`/view/detail?itemId=${item.itemId}`}
                     isDisabled={item.state === ItemState.COMPLETE}
                     key={item.itemId}
                   >

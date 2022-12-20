@@ -145,7 +145,7 @@ const Detail = () => {
   const [reqOn, setReqOn] = useState(false);
 
   const router = useRouter();
-  const { id } = router.query;
+  const { itemId } = router.query;
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
@@ -153,12 +153,10 @@ const Detail = () => {
 
   useEffect(() => {
     const get = async () => {
-      getDetailData(Number(id)).then((res) => setData(res));
+      getDetailData(Number(itemId)).then((res) => setData(res));
     };
-    if (id) {
-      get();
-    }
-  }, [id]);
+    get();
+  }, [itemId]);
 
   const closeModal = () => {
     setReqOn(false);
@@ -179,9 +177,7 @@ const Detail = () => {
   const { isLoading, mutate, mutateAsync } = useMutation(
     ({ itemId, userId, state }: { itemId: number; userId: number; state?: string }) => {
       if (state)
-        return patchItem(itemId, userId, state).then(() => {
-          linkOnClick(String(data?.chatUrl));
-        });
+        return patchItem(itemId, userId, state)
       return deleteItem(itemId, userId);
     },
     {
@@ -191,7 +187,6 @@ const Detail = () => {
     },
   );
 
-  console.log(ItemState.RESERVED);
   return (
     <>
       <Seo title="Detail" />
@@ -206,11 +201,18 @@ const Detail = () => {
             subText="소통을 위한 카카오톡 오픈채팅방으로 바로 이동합니다"
             buttonText="이동하기"
             buttonOnClick={() => {
-              mutate({
-                itemId: data.itemId,
-                userId: Number(localStorage.getItem('userId')),
-                state: 'RESERVED',
-              });
+              mutate(
+                {
+                  itemId: data.itemId,
+                  userId: Number(localStorage.getItem('userId')),
+                  state: 'RESERVED',
+                },
+                {
+                  onSettled: (data, variables, context) => {
+                    linkOnClick(String(data?.chatUrl));
+                  },
+                },
+              );
             }}
           />
         ) : (
