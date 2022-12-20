@@ -208,7 +208,7 @@ const Detail = () => {
                   state: 'RESERVED',
                 },
                 {
-                  onSettled: (data, variables, context) => {
+                  onSettled: () => {
                     linkOnClick(String(data?.chatUrl));
                   },
                 },
