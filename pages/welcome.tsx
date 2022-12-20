@@ -165,9 +165,8 @@ const Home: NextPage = () => {
       });
       try {
         // access token 가져오기
-        const res = await axios
-          .post('https://kauth.kakao.com/oauth/token', payload)
-        
+        const res = await axios.post('https://kauth.kakao.com/oauth/token', payload);
+
         // access token 설정
         window.Kakao.Auth.setAccessToken(res.data.access_token);
         // history.replace('/profile');
@@ -183,7 +182,9 @@ const Home: NextPage = () => {
     };
 
     if (code !== undefined) {
-      getToken();
+      if (typeof window !== undefined) {
+        getToken();
+      }
     }
   }, [router.query]);
 
