@@ -11,7 +11,7 @@ import { login } from '../src/apis';
 
 const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   height: 100%;
   font-family: NanumSquare Neo variable;
   font-size: 30px;

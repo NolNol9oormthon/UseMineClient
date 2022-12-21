@@ -131,7 +131,7 @@ const ItemList = styled.div`
   gap: 16px;
   padding: 108px 0 0 0;
   height: 100%;
-  max-height: calc(100vh - 56px);
+  max-height: calc(calc(var(--vh, 1vh) * 100) ; - 56px);
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
