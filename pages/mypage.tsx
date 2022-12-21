@@ -61,7 +61,7 @@ const Contents = styled.div`
   gap: 16px;
   padding: 72px 0 8px 0;
   height: 100%;
-  max-height: calc(calc(var(--vh, 1vh) * 100) ; - 56px);
+  max-height: calc(var(--vh, 1vh) * 100 - 56px);
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
