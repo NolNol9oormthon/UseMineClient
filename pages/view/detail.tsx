@@ -187,7 +187,7 @@ const Detail = () => {
 
   return (
     <>
-      <Seo title="Detail" />
+      <Seo title={data?.itemName} />
       <Container>
         {reqOn ? (
           <Modal
