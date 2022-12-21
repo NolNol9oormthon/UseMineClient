@@ -26,7 +26,7 @@ const WebAppContainer = styled.div`
   width: 100%;
   max-width: 420px;
   height: 100%;
-  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   padding: 0px 20px;
   background-color: ${(props) => props.theme.colors.white};
   // position: absolute;
