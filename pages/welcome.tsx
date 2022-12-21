@@ -8,6 +8,7 @@ import qs from 'qs';
 import ChevronRightBlue from '../assets/icons/chevron-right-blue.svg';
 import ChevronRightOrange from '../assets/icons/chevron-right-orange.svg';
 import { login } from '../src/apis';
+import Seo from '../src/components/Seo';
 
 const Container = styled.div`
   width: 100%;
@@ -89,7 +90,7 @@ const LottieContainer = styled.div`
   padding-top: 100px;
 `;
 
-const Home: NextPage = () => {
+const Welcome: NextPage = () => {
   const [userInfo, setUserInfo] = useState<any>({
     id: '',
     nickname: '',
@@ -197,43 +198,46 @@ const Home: NextPage = () => {
   };
 
   return (
-    <Container>
-      {userInfo?.id ? (
-        <>
-          <MainText>
-            반가워요
-            <br />
-            {userInfo?.nickname}님
-          </MainText>
-          <SemiText>같이가치를 위한 나눔을 시작해볼까요?</SemiText>
-          <RegisterButton onClick={formOnClick}>
-            <ButtonTextBlue>물품 등록하기</ButtonTextBlue>
-            <ButtonIcon>
-              <ChevronRightBlue />
-            </ButtonIcon>
-          </RegisterButton>
-          <ViewButton onClick={viewOnClick}>
-            <ButtonTextOrange>둘러보기</ButtonTextOrange>
-            <ButtonIcon>
-              <ChevronRightOrange />
-            </ButtonIcon>
-          </ViewButton>
-        </>
-      ) : (
-        <LottieContainer>
-          <lottie-player
-            id="firstLottie"
-            ref={ref}
-            autoplay
-            loop
-            mode="normal"
-            src="https://lottie.host/2714ac92-2f14-465f-842b-c63e9d0f858f/uoVSKxFYSM.json"
-            style={{ width: '200px', height: '200px' }}
-          ></lottie-player>
-        </LottieContainer>
-      )}
-    </Container>
+    <>
+      <Seo title="Welcome" />
+      <Container>
+        {userInfo?.id ? (
+          <>
+            <MainText>
+              반가워요
+              <br />
+              {userInfo?.nickname}님
+            </MainText>
+            <SemiText>같이가치를 위한 나눔을 시작해볼까요?</SemiText>
+            <RegisterButton onClick={formOnClick}>
+              <ButtonTextBlue>물품 등록하기</ButtonTextBlue>
+              <ButtonIcon>
+                <ChevronRightBlue />
+              </ButtonIcon>
+            </RegisterButton>
+            <ViewButton onClick={viewOnClick}>
+              <ButtonTextOrange>둘러보기</ButtonTextOrange>
+              <ButtonIcon>
+                <ChevronRightOrange />
+              </ButtonIcon>
+            </ViewButton>
+          </>
+        ) : (
+          <LottieContainer>
+            <lottie-player
+              id="firstLottie"
+              ref={ref}
+              autoplay
+              loop
+              mode="normal"
+              src="https://lottie.host/2714ac92-2f14-465f-842b-c63e9d0f858f/uoVSKxFYSM.json"
+              style={{ width: '200px', height: '200px' }}
+            ></lottie-player>
+          </LottieContainer>
+        )}
+      </Container>
+    </>
   );
 };
 
-export default Home;
+export default Welcome;
