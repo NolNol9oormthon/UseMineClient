@@ -29,4 +29,5 @@ interface IModal {
   subText: any;
   buttonText: any;
   buttonOnClick: any;
+  isOrange: boolean;
 }
