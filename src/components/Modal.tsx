@@ -34,21 +34,24 @@ const ButtonContainer = styled.div`
   justify-content: center;
 `;
 
-const LeftButton = styled.button`
+const LeftButton = styled.button<{ isOrange: boolean }>`
   width: 126px;
   height: 44px;
   border: hidden;
-  border-radius: 7px;
-  background-color: ${(props) => props.theme.colors.tam_Orange100};
-  color: ${(props) => props.theme.colors.tam_Orange500};
+  border-radius: 6px;
+  background-color: ${(props) =>
+    props.isOrange ? props.theme.colors.tam_Orange100 : props.theme.colors.tam_blue100};
+  color: ${(props) =>
+    props.isOrange ? props.theme.colors.tam_Orange500 : props.theme.colors.tam_blue500};
 `;
 
-const RightButton = styled.button`
+const RightButton = styled.button<{ isOrange: boolean }>`
   width: 126px;
   height: 44px;
   border: hidden;
-  border-radius: 7px;
-  background-color: ${(props) => props.theme.colors.tam_Orange500};
+  border-radius: 6px;
+  background-color: ${(props) =>
+    props.isOrange ? props.theme.colors.tam_Orange500 : props.theme.colors.tam_blue500};
   color: ${(props) => props.theme.colors.white};
 `;
 
@@ -60,7 +63,8 @@ const Modal: React.FC<IModal> = ({
   text,
   subText,
   buttonText,
-  buttonOnClick
+  buttonOnClick,
+  isOrange = true,
 }) => {
   const onMaskClick = (e: any) => {
     if (e.target === e.currentTarget) {
@@ -86,8 +90,12 @@ const Modal: React.FC<IModal> = ({
             <TextContainer>{text}</TextContainer>
             <SubTextContainer>{subText}</SubTextContainer>
             <ButtonContainer>
-              <LeftButton onClick={cancelOnClick}>취소</LeftButton>
-              <RightButton onClick={buttonOnClick}>{buttonText}</RightButton>
+              <LeftButton onClick={cancelOnClick} isOrange={isOrange}>
+                취소
+              </LeftButton>
+              <RightButton onClick={buttonOnClick} isOrange={isOrange}>
+                {buttonText}
+              </RightButton>
             </ButtonContainer>
           </InnerContainer>
         </ModalInner>
@@ -137,7 +145,7 @@ const ModalInner = styled.div`
   transform: translateY(-50%);
   margin: 0 auto;
   border: none;
-  border-radius: 20px;
+  border-radius: 4px;
   background-color: rgba(255, 255, 255, 1);
 `;
 
