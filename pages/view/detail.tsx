@@ -195,6 +195,7 @@ const Detail = () => {
             visible={reqOn}
             maskClosable={true}
             onClose={closeModal}
+            isOrange={true}
             text="오픈 채팅방 이동"
             subText="소통을 위한 카카오톡 오픈채팅방으로 바로 이동합니다"
             buttonText="이동하기"
