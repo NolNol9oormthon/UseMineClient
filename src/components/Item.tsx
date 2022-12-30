@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import UserProfileFill from '../../assets/icons/user-profile-fill.svg';
 import { ItemProps } from '../../pages/view';
@@ -13,14 +14,6 @@ export enum ItemState {
 const Container = styled.div`
   display: flex;
   width: 100%;
-`;
-
-const ItemImage = styled.img`
-  display: flex;
-  min-width: 116px;
-  width: 116px;
-  height: 116px;
-  border-radius: 4px;
 `;
 
 const DescriptionSection = styled.div`
@@ -101,6 +94,29 @@ const WriterSection = styled.div`
   align-items: center;
 `;
 
+const ImageContainer = styled.div`
+  width: 116px;
+  height: 116px;
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 116px;
+`;
+
+const ItemImage = styled(LazyLoadImage)`
+  top: 0;
+  left: 0;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
+`;
+
+export const dateConverter = (date: string) => {
+  const value = date.slice(date.length - 8, date.length - 3);
+  return value;
+};
+
 const Item = ({
   state,
   itemName,
@@ -114,7 +130,9 @@ const Item = ({
 >) => {
   return (
     <Container>
-      <ItemImage src={imageUrl} />
+      <ImageContainer>
+        <ItemImage src={imageUrl} />
+      </ImageContainer>
       <DescriptionSection>
         <TextSection>
           {state === ItemState.AVAILABLE ? (
@@ -126,14 +144,17 @@ const Item = ({
           {state === ItemState.COMPLETE ? (
             <StateChip state={ItemState.COMPLETE}>종료</StateChip>
           ) : null}
-          <Name state={state}>{itemName}</Name>
+          <Name state={state}>
+            {itemName.length < 15 ? itemName : itemName.slice(0, 14) + '...'}
+          </Name>
           <WriterSection>
             <UserProfileFill />
             <Nickname>{ownerNickname}</Nickname>
           </WriterSection>
         </TextSection>
         <AvaliableTime state={state}>
-          {availableStartTime} ~ {availableEndTime}
+          {availableStartTime && dateConverter(availableStartTime)} ~{' '}
+          {availableEndTime && dateConverter(availableEndTime)}
         </AvaliableTime>
       </DescriptionSection>
     </Container>

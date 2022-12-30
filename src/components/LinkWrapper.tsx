@@ -5,6 +5,7 @@ const LinkWrapper = ({
   children,
   href,
   isDisabled,
+  itemId,
   ...props
 }: {
   children: React.ReactNode;

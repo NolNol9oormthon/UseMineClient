@@ -7,10 +7,12 @@ import qs from 'qs';
 
 import ChevronRightBlue from '../assets/icons/chevron-right-blue.svg';
 import ChevronRightOrange from '../assets/icons/chevron-right-orange.svg';
+import { login } from '../src/apis';
+import Seo from '../src/components/Seo';
 
 const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   height: 100%;
   font-family: NanumSquare Neo variable;
   font-size: 30px;
@@ -88,8 +90,8 @@ const LottieContainer = styled.div`
   padding-top: 100px;
 `;
 
-const Home: NextPage = () => {
-  const [userInfo, setUserInfo] = useState({
+const Welcome: NextPage = () => {
+  const [userInfo, setUserInfo] = useState<any>({
     id: '',
     nickname: '',
   });
@@ -97,6 +99,10 @@ const Home: NextPage = () => {
   // let currentUrl = getAbsoluteURL().origin
   const router = useRouter();
   const ref = useRef(null);
+
+  React.useEffect(() => {
+    import('@lottiefiles/lottie-player');
+  });
 
   console.log(router);
   let currentUrl = '';
@@ -129,11 +135,17 @@ const Home: NextPage = () => {
             profileUrl: data.properties.profile_image,
           };
           // 백에 보내
-          const returnData = {
-            id: 'test3',
-            nickname: '곤란한 한라봉',
-          };
-          setUserInfo(returnData);
+          const loginResult = await login(data.id, data.properties.profile_image).then((data) => {
+            console.log(data);
+            localStorage.setItem('userId', data.id);
+            localStorage.setItem('nickname', data.nickname);
+            setUserInfo(data);
+          });
+          // const returnData = {
+          //   id: 'test3',
+          //   nickname: '곤란한 한라봉',
+          // };
+          // setUserInfo(returnData);
         }
         // setUserId(data.id);
         // setNickName(data.properties.nickname);
@@ -162,11 +174,18 @@ const Home: NextPage = () => {
         getProfile();
       } catch (err) {
         console.log(err);
+        const sendData = {
+          id: localStorage.getItem('userId'),
+          nickname: localStorage.getItem('nickname'),
+        };
+        setUserInfo(sendData);
       }
     };
 
     if (code !== undefined) {
-      getToken();
+      if (typeof window !== undefined) {
+        getToken();
+      }
     }
   }, [router.query]);
 
@@ -174,44 +193,51 @@ const Home: NextPage = () => {
     router.push('/form');
   };
 
+  const viewOnClick = () => {
+    router.push('/view');
+  };
+
   return (
-    <Container>
-      {userInfo?.id ? (
-        <>
-          <MainText>
-            반가워요
-            <br />
-            {userInfo?.nickname}님
-          </MainText>
-          <SemiText>같이가치를 위한 나눔을 시작해볼까요?</SemiText>
-          <RegisterButton onClick={formOnClick}>
-            <ButtonTextBlue>물품 등록하기</ButtonTextBlue>
-            <ButtonIcon>
-              <ChevronRightBlue />
-            </ButtonIcon>
-          </RegisterButton>
-          <ViewButton>
-            <ButtonTextOrange>둘러보기</ButtonTextOrange>
-            <ButtonIcon>
-              <ChevronRightOrange />
-            </ButtonIcon>
-          </ViewButton>
-        </>
-      ) : (
-        <LottieContainer>
-          <lottie-player
-            id="firstLottie"
-            ref={ref}
-            autoplay
-            loop
-            mode="normal"
-            src="https://lottie.host/2714ac92-2f14-465f-842b-c63e9d0f858f/uoVSKxFYSM.json"
-            style={{ width: '200px', height: '200px' }}
-          ></lottie-player>
-        </LottieContainer>
-      )}
-    </Container>
+    <>
+      <Seo title="Welcome" />
+      <Container>
+        {userInfo?.id ? (
+          <>
+            <MainText>
+              반가워요
+              <br />
+              {userInfo?.nickname}님
+            </MainText>
+            <SemiText>같이가치를 위한 나눔을 시작해볼까요?</SemiText>
+            <RegisterButton onClick={formOnClick}>
+              <ButtonTextBlue>물품 등록하기</ButtonTextBlue>
+              <ButtonIcon>
+                <ChevronRightBlue />
+              </ButtonIcon>
+            </RegisterButton>
+            <ViewButton onClick={viewOnClick}>
+              <ButtonTextOrange>둘러보기</ButtonTextOrange>
+              <ButtonIcon>
+                <ChevronRightOrange />
+              </ButtonIcon>
+            </ViewButton>
+          </>
+        ) : (
+          <LottieContainer>
+            <lottie-player
+              id="firstLottie"
+              ref={ref}
+              autoplay
+              loop
+              mode="normal"
+              src="https://lottie.host/2714ac92-2f14-465f-842b-c63e9d0f858f/uoVSKxFYSM.json"
+              style={{ width: '200px', height: '200px' }}
+            ></lottie-player>
+          </LottieContainer>
+        )}
+      </Container>
+    </>
   );
 };
 
-export default Home;
+export default Welcome;

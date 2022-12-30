@@ -1,15 +1,23 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import styled from 'styled-components';
 
+import { ItemProps } from '../../pages/view';
+import { deleteItem, patchItem } from '../apis';
 import { ItemState } from './Item';
+import Modal from './Modal';
 
-const Container = styled.div`
+const Container = styled.div<{ isAvailable: boolean; isReserved: boolean; isComplete: boolean }>`
   width: 100%;
-
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.tam_Orange50};
+  background-color: ${({ theme, isAvailable, isReserved }) =>
+    isAvailable
+      ? theme.colors.tam_Orange50
+      : isReserved
+      ? theme.colors.tam_blue50
+      : theme.colors.gray50};
   padding: 16px;
 `;
 
@@ -76,38 +84,155 @@ const ButtonSection = styled.div`
   gap: 10px;
 `;
 
-const Button = styled.button`
-  border: 1px solid red;
+const CancelButton = styled.button`
   border-radius: 8px;
   width: 50%;
+  background-color: ${({ theme }) => theme.colors.tam_blue100};
+  color: ${({ theme }) => theme.colors.tam_blue400};
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
 `;
 
-const ShareCard = () => {
-  const state_id = 'AVAILABLE';
-  const item_name = '감귤모자';
+const CompleteButton = styled.button`
+  border-radius: 8px;
+  width: 50%;
+  background-color: ${({ theme }) => theme.colors.tam_blue500};
+  color: ${({ theme }) => theme.colors.white};
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+`;
+
+const LongCancelButton = styled.button`
+  border-radius: 8px;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.tam_Orange100};
+  color: ${({ theme }) => theme.colors.tam_Orange500};
+
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+`;
+
+const ShareCard = ({
+  imageUrl,
+  itemName,
+  state,
+  itemId,
+}: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state' | 'itemId'>) => {
+  const queryClient = useQueryClient();
+  const isAvailable = state === ItemState.AVAILABLE;
+  const isReserved = state === ItemState.RESERVED;
+  const isComplete = state === ItemState.COMPLETE;
+  const [reqOn, setReqOn] = useState(false);
+  const [buttonType, setButtonType] = useState<string>();
+
+  const ButtonTypes = {
+    CancelButton: 'CancelButton',
+    CompleteButton: 'CompleteButton',
+    LongCancelButton: 'LongCancelButton',
+  };
+
+  const { mutate } = useMutation(
+    ({ itemId, userId, state }: { itemId: number; userId: number; state?: string }) => {
+      if (state) return patchItem(itemId, userId, state);
+      return deleteItem(itemId, userId);
+    },
+    {
+      onSuccess: () => {
+        return queryClient.invalidateQueries(['myData']);
+      },
+    },
+  );
+
+  const handleDelete = () => {
+    mutate({ itemId, userId: Number(localStorage.getItem('userId')) });
+  };
+  const handleComplete = () => {
+    mutate({ itemId, userId: Number(localStorage.getItem('userId')), state: 'COMPLETE' });
+  };
+
+  const handleReopen = () => {
+    mutate({ itemId, userId: Number(localStorage.getItem('userId')), state: 'AVAILABLE' });
+  };
+
+  const closeModal = () => {
+    setReqOn(false);
+  };
+
   return (
-    <Container>
+    <Container isAvailable={isAvailable} isReserved={isReserved} isComplete={isComplete}>
+      {reqOn ? (
+        <Modal
+          className="req_modal"
+          visible={reqOn}
+          maskClosable={true}
+          onClose={closeModal}
+          isOrange={isAvailable}
+          text={buttonType === ButtonTypes.CompleteButton ? '나눔 완료' : '나눔 취소'}
+          subText={
+            buttonType === ButtonTypes.CompleteButton
+              ? '나눔을 완료하시겠습니까?'
+              : buttonType === ButtonTypes.CancelButton
+              ? '예정된 나눔을 취소하고 새로운 나눔을 기다리시겠습니까?'
+              : '나눔을 취소하시겠습니까?'
+          }
+          buttonText={buttonType === ButtonTypes.CompleteButton ? '완료하기' : '취소하기'}
+          buttonOnClick={() => {
+            if (buttonType === ButtonTypes.CompleteButton) handleComplete();
+            if (buttonType === ButtonTypes.CancelButton) handleReopen();
+            if (buttonType === ButtonTypes.LongCancelButton) handleDelete();
+          }}
+        />
+      ) : (
+        <></>
+      )}
       <ItemSection>
         <ImageContainer>
-          <Image src="https://menu.mt.co.kr/moneyweek/thumb/2022/02/04/06/2022020410348097173_1.jpg" />
+          <Image src={imageUrl} alt={itemName} />
         </ImageContainer>
         <TextContainer>
-          {/* {state_id === ItemState.AVAILABLE ? (
-            <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip>
-          ) : null} */}
-          {/* {state_id === ItemState.RESERVED ? (
-            <StateChip state={ItemState.RESERVED}>전달 중</StateChip>
-          ) : null}
-          {state_id === ItemState.COMPLETE ? (
-            <StateChip state={ItemState.COMPLETE}>종료</StateChip>
-          ) : null} */}
-          <Name state={state_id}>{item_name}</Name>
+          {isAvailable ? <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip> : null}
+          {isReserved ? <StateChip state={ItemState.RESERVED}>나눔 예약</StateChip> : null}
+          {isComplete ? <StateChip state={ItemState.COMPLETE}>나눔 완료</StateChip> : null}
+          <Name state={state}>{itemName}</Name>
         </TextContainer>
       </ItemSection>
-      <ButtonSection>
-        <Button>d</Button>
-        <Button>d</Button>
-      </ButtonSection>
+      {isComplete ? null : (
+        <ButtonSection>
+          {isReserved ? (
+            <>
+              <CancelButton
+                onClick={() => {
+                  setButtonType(ButtonTypes.CancelButton);
+                  setReqOn(true);
+                }}
+              >
+                나눔 취소
+              </CancelButton>
+              <CompleteButton
+                onClick={() => {
+                  setButtonType(ButtonTypes.CompleteButton);
+                  setReqOn(true);
+                }}
+              >
+                나눔 완료
+              </CompleteButton>
+            </>
+          ) : null}
+          {isAvailable ? (
+            <LongCancelButton
+              onClick={() => {
+                setButtonType(ButtonTypes.LongCancelButton);
+                setReqOn(true);
+              }}
+            >
+              나눔 취소
+            </LongCancelButton>
+          ) : null}
+        </ButtonSection>
+      )}
     </Container>
   );
 };

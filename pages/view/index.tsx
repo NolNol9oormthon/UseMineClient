@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -16,6 +16,7 @@ import Souvenir from '../../assets/icons/souvenir_orange.svg';
 import Etc from '../../assets/icons/etc_orange.svg';
 import { getAllData } from '../../src/apis';
 import useObserver from '../../src/hooks/useObserver';
+import Seo from '../../src/components/Seo';
 
 const mockCategories = [
   {
@@ -39,7 +40,7 @@ const mockCategories = [
     component: () => <Necessities />,
   },
   {
-    category_id: 'ticket',
+    category_id: 'coupon',
     category_name: '할인권',
     component: () => <Ticket />,
   },
@@ -130,7 +131,7 @@ const ItemList = styled.div`
   gap: 16px;
   padding: 108px 0 0 0;
   height: 100%;
-  max-height: calc(100vh - 56px);
+  max-height: calc(var(--vh, 1vh) * 100 - 56px);
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
@@ -152,7 +153,7 @@ export interface ItemProps {
 const View: NextPage = () => {
   const [clickedCategoryChip, setClickedCategoryChip] = useState<string>('all');
 
-  const { data, fetchNextPage, hasNextPage, status } = useInfiniteQuery(
+  const { data, fetchNextPage, status } = useInfiniteQuery(
     ['infiniteDatas', clickedCategoryChip],
     ({ pageParam = 0 }) => getAllData(clickedCategoryChip, pageParam),
     {
@@ -173,43 +174,46 @@ const View: NextPage = () => {
   };
 
   return (
-    <Container>
-      <Header headerTitle="나눔목록" />
-      <CategoryContainer>
-        <CategoryList>
-          {mockCategories.map((category) => (
-            <ChipWrapper key={category.category_id}>
-              {clickedCategoryChip === category.category_id ? <StyledCheck /> : null}
-              <CategoryChip
-                onClick={() => {
-                  handelCategoryChipClick(category.category_id);
-                }}
-              >
-                {category.component()}
-              </CategoryChip>
-              <CategoryName>{category.category_name}</CategoryName>
-            </ChipWrapper>
-          ))}
-        </CategoryList>
-      </CategoryContainer>
-      <ItemList>
-        <>
-          {status === 'success' &&
-            data.pages.map((page) => {
-              return page.map((item: ItemProps) => (
-                <LinkWrapper
-                  href={`/view/${item.itemId}`}
-                  isDisabled={item.state === ItemState.COMPLETE}
-                  key={item.itemId}
+    <>
+      <Seo title="List" />
+      <Container>
+        <Header headerTitle="나눔목록" />
+        <CategoryContainer>
+          <CategoryList>
+            {mockCategories.map((category) => (
+              <ChipWrapper key={category.category_id}>
+                {clickedCategoryChip === category.category_id ? <StyledCheck /> : null}
+                <CategoryChip
+                  onClick={() => {
+                    handelCategoryChipClick(category.category_id);
+                  }}
                 >
-                  <Item {...item} />
-                </LinkWrapper>
-              ));
-            })}
-        </>
-        <div ref={setTarget}></div>
-      </ItemList>
-    </Container>
+                  {category.component()}
+                </CategoryChip>
+                <CategoryName>{category.category_name}</CategoryName>
+              </ChipWrapper>
+            ))}
+          </CategoryList>
+        </CategoryContainer>
+        <ItemList>
+          <>
+            {status === 'success' &&
+              data?.pages.map((page) => {
+                return page.map((item: ItemProps) => (
+                  <LinkWrapper
+                    href={`/view/detail?itemId=${item.itemId}`}
+                    isDisabled={item.state === ItemState.COMPLETE}
+                    key={item.itemId}
+                  >
+                    <Item {...item} />
+                  </LinkWrapper>
+                ));
+              })}
+          </>
+          <div ref={setTarget}></div>
+        </ItemList>
+      </Container>
+    </>
   );
 };
 

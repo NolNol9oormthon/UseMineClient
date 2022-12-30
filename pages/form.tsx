@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import axios from 'axios';
 
 import ChevronLeftBlack from '../assets/icons/chevron-left-black.svg';
 import CameraIcon from '../assets/icons/camera.svg';
 import FoodIcon from '../assets/icons/food.svg';
-import ElectronicsIcon from '../assets/icons/electronics.svg';
+import CouponIcon from '../assets/icons/ticket.svg';
 import EtcIcon from '../assets/icons/etc.svg';
 import SouvenirIcon from '../assets/icons/souvenir.svg';
 import NecessitiesIcon from '../assets/icons/necessities.svg';
 import ClothesIcon from '../assets/icons/clothes.svg';
 import CheckIcon from '../assets/icons/check-white.svg';
+import { createItem } from '../src/apis/index';
+import Seo from '../src/components/Seo';
 
 const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   height: 100%;
   font-family: NanumSquare Neo variable;
   font-size: 30px;
@@ -252,7 +253,7 @@ const LinkInputBox = styled.input`
   height: 50px;
   border-radius: 4px;
   color: ${(props) => props.theme.colors.gray900};
-  font-family: NanumSquare Neo;
+  font-family: NanumSquare Neo variable;
   font-size: 14px;
   font-weight: 700;
   line-height: 28px;
@@ -274,8 +275,7 @@ const LinkInputBox = styled.input`
         ? props.theme.colors.white
         : props.theme.colors.red_100
       : {}};
-  //   border: ${(props) =>
-    props.value ? `1px solid ${props.theme.colors.tam_blue500}` : 'hidden'};
+
   &::-webkit-input-placeholder {
     color: ${(props) => props.theme.colors.gray500};
   }
@@ -303,6 +303,21 @@ const ErrorComment = styled.div`
   color: #df0000;
 `;
 
+const dateConverter = (time: string) => {
+  const now = new Date();
+  const tmpList = String(now).split(':');
+  const reDate =
+    tmpList[0].slice(0, tmpList[0].length - 2) +
+    time +
+    ':00' +
+    tmpList[2].slice(2, tmpList[2].length);
+  const returnDate = new Date(Date.parse(reDate) + 32400000);
+  console.log(returnDate.toISOString());
+  const convertTime = returnDate.toISOString();
+
+  return convertTime.slice(0, convertTime.length - 5);
+};
+
 const Home: NextPage = () => {
   const [productImage, setProductImage] = useState<any | null>(null);
   const [productImageChange, setProductImageChange] = useState(false);
@@ -327,7 +342,7 @@ const Home: NextPage = () => {
       icon: ClothesIcon,
     },
     {
-      name: '생활 용품',
+      name: '생활용품',
       value: 'NECESSITIES',
       icon: NecessitiesIcon,
     },
@@ -337,9 +352,9 @@ const Home: NextPage = () => {
       icon: SouvenirIcon,
     },
     {
-      name: '전자 기기',
-      value: 'ELECTRONICS',
-      icon: ElectronicsIcon,
+      name: '할인권',
+      value: 'COUPON',
+      icon: CouponIcon,
     },
     {
       name: '기타',
@@ -348,6 +363,7 @@ const Home: NextPage = () => {
     },
   ];
 
+  const router = useRouter();
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
   const handleBgClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -358,7 +374,7 @@ const Home: NextPage = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('hello');
-    let reader = new FileReader();
+    const reader = new FileReader();
     const target = event.target as HTMLInputElement;
     const fileUploaded: File = (target.files as FileList)[0];
     console.log(fileUploaded);
@@ -411,127 +427,155 @@ const Home: NextPage = () => {
     }
   };
 
+  const doneOnClick = async () => {
+    // dateConverter(arriveTime);
+    const formData = new FormData();
+
+    if (productImage) {
+      formData.append('imageFile', productImage.file);
+    }
+    formData.append('availableEndTime', dateConverter(departTime));
+    formData.append('availableStartTime', dateConverter(arriveTime));
+    formData.append('category', CategoryList[categoryIdx].value);
+    formData.append('chatUrl', chatLink);
+    formData.append('content', description);
+    formData.append('itemName', productName);
+    formData.append('ownerId', String(localStorage.getItem('userId')));
+
+    const createItemResult = await createItem(formData).then((data) => {
+      console.log(data);
+      router.push('/view');
+    });
+  };
+
+  const prevOnClick = () => {
+    router.push('/');
+  };
+
   return (
-    <Container>
-      {nextOn ? (
-        <>
-          <Header>
-            <PrevButton onClick={() => setNextOn(false)}>
-              <ChevronLeftBlack />
-            </PrevButton>
-            <HeaderTitle>거래 정보 등록</HeaderTitle>
-            <PrevButton />
-          </Header>
-          <AirportTimeBox>
-            <TimeSettingBox>
-              <TimeSettingTitle>공항 도착 시간</TimeSettingTitle>
-              <TimeInputBox
-                value={arriveTime}
-                onChange={(e) => arriveTimeOnChange(e)}
-                placeholder="10:00"
+    <>
+      <Seo title="Register" />
+      <Container>
+        {nextOn ? (
+          <>
+            <Header>
+              <PrevButton onClick={() => setNextOn(false)}>
+                <ChevronLeftBlack />
+              </PrevButton>
+              <HeaderTitle>거래 정보 등록</HeaderTitle>
+              <PrevButton />
+            </Header>
+            <AirportTimeBox>
+              <TimeSettingBox>
+                <TimeSettingTitle>제주 공항 도착 시간</TimeSettingTitle>
+                <TimeInputBox
+                  value={arriveTime}
+                  onChange={(e) => arriveTimeOnChange(e)}
+                  placeholder="10:00"
+                />
+              </TimeSettingBox>
+              <PeriodMark>~</PeriodMark>
+              <TimeSettingBox>
+                <TimeSettingTitle>제주 공항 떠나는 시간</TimeSettingTitle>
+                <TimeInputBox
+                  value={departTime}
+                  onChange={(e) => {
+                    departTimeOnChange(e);
+                  }}
+                  placeholder="14:00"
+                />
+              </TimeSettingBox>
+            </AirportTimeBox>
+            <LinkBox>
+              <TimeSettingTitle>오픈 채팅방 링크</TimeSettingTitle>
+              <LinkInputBox
+                value={chatLink}
+                onChange={(e) => linkOnChange(e)}
+                placeholder="https://open.kakao.com/o/sh07SwTe"
               />
-            </TimeSettingBox>
-            <PeriodMark>~</PeriodMark>
-            <TimeSettingBox>
-              <TimeSettingTitle>공항 출발 시간</TimeSettingTitle>
-              <TimeInputBox
-                value={departTime}
-                onChange={(e) => {
-                  departTimeOnChange(e);
-                }}
-                placeholder="14:00"
-              />
-            </TimeSettingBox>
-          </AirportTimeBox>
-          <LinkBox>
-            <TimeSettingTitle>오픈 채팅방 링크</TimeSettingTitle>
-            <LinkInputBox
-              value={chatLink}
-              onChange={(e) => linkOnChange(e)}
-              placeholder="https://open.kakao.com/o/sh07SwTe"
-            />
-            {errorComment ? <ErrorComment>{errorComment}</ErrorComment> : <></>}
-          </LinkBox>
-          {!errorComment && arriveTime && departTime && chatLink ? (
-            <NextButton onClick={() => setDone(true)} style={{ backgroundColor: '#5566FF' }}>
-              등록완료
-            </NextButton>
-          ) : (
-            <NextButton>등록완료</NextButton>
-          )}
-        </>
-      ) : (
-        <>
-          <Header>
-            <PrevButton>
-              <ChevronLeftBlack />
-            </PrevButton>
-            <HeaderTitle>물품정보 등록</HeaderTitle>
-            <PrevButton />
-          </Header>
-          <ProductImageUploadButton
-            onClick={(e) => handleBgClick(e)}
-            style={{
-              backgroundImage: `url(${
-                productImage?.imagePreviewUrl ? productImage?.imagePreviewUrl : ''
-              })`,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-            }}
-          >
-            {productImage?.imagePreviewUrl ? <></> : <CameraIcon width={32} height={32} />}
-            <input
-              type="file"
-              ref={hiddenFileInput}
-              onChange={(e) => {
-                handleChange(e);
+              {errorComment ? <ErrorComment>{errorComment}</ErrorComment> : <></>}
+            </LinkBox>
+            {!errorComment && arriveTime && departTime && chatLink ? (
+              <NextButton onClick={() => doneOnClick()} style={{ backgroundColor: '#5566FF' }}>
+                등록완료
+              </NextButton>
+            ) : (
+              <NextButton>등록완료</NextButton>
+            )}
+          </>
+        ) : (
+          <>
+            <Header>
+              <PrevButton onClick={prevOnClick}>
+                <ChevronLeftBlack />
+              </PrevButton>
+              <HeaderTitle>물품정보 등록</HeaderTitle>
+              <PrevButton />
+            </Header>
+            <ProductImageUploadButton
+              onClick={(e) => handleBgClick(e)}
+              style={{
+                backgroundImage: `url(${
+                  productImage?.imagePreviewUrl ? productImage?.imagePreviewUrl : ''
+                })`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
               }}
-              style={{ display: 'none' }}
+            >
+              {productImage?.imagePreviewUrl ? <></> : <CameraIcon width={32} height={32} />}
+              <input
+                type="file"
+                ref={hiddenFileInput}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
+                style={{ display: 'none' }}
+              />
+            </ProductImageUploadButton>
+            <ProductNameInput
+              value={productName}
+              onChange={(e) => productNameOnChange(e)}
+              placeholder="상품이름을 입력해주세요"
             />
-          </ProductImageUploadButton>
-          <ProductNameInput
-            value={productName}
-            onChange={(e) => productNameOnChange(e)}
-            placeholder="상품이름을 입력해주세요"
-          />
-          <DescriptionTextBox
-            value={description}
-            onChange={(e) => descriptionOnChange(e)}
-            placeholder="내용을 입력해주세요"
-          />
-          <CategoryHeader>카테고리</CategoryHeader>
-          {/* <CategoryContainer></CategoryContainer> */}
-          <CategoryContainer>
-            {CategoryList.map((category, idx) => (
-              <CategoryCard key={category.value}>
-                <ButtonContainer>
-                  {idx == categoryIdx ? (
-                    <CategoryRadioButton onClick={() => setCategoryIdx(-1)}>
-                      <category.icon />
-                      <SelectMark>
-                        <CheckIcon />
-                      </SelectMark>
-                    </CategoryRadioButton>
-                  ) : (
-                    <CategoryRadioButton onClick={() => setCategoryIdx(idx)}>
-                      <category.icon />
-                    </CategoryRadioButton>
-                  )}
-                </ButtonContainer>
-                <CategoryLabel>{category.name}</CategoryLabel>
-              </CategoryCard>
-            ))}
-          </CategoryContainer>
-          {categoryIdx > -1 && productName && description && productImage?.imagePreviewUrl ? (
-            <NextButton onClick={() => setNextOn(true)} style={{ backgroundColor: '#5566FF' }}>
-              다음
-            </NextButton>
-          ) : (
-            <NextButton>다음</NextButton>
-          )}
-        </>
-      )}
-    </Container>
+            <DescriptionTextBox
+              value={description}
+              onChange={(e) => descriptionOnChange(e)}
+              placeholder="내용을 입력해주세요"
+            />
+            <CategoryHeader>카테고리</CategoryHeader>
+            {/* <CategoryContainer></CategoryContainer> */}
+            <CategoryContainer>
+              {CategoryList.map((category, idx) => (
+                <CategoryCard key={category.value}>
+                  <ButtonContainer>
+                    {idx == categoryIdx ? (
+                      <CategoryRadioButton onClick={() => setCategoryIdx(-1)}>
+                        <category.icon />
+                        <SelectMark>
+                          <CheckIcon />
+                        </SelectMark>
+                      </CategoryRadioButton>
+                    ) : (
+                      <CategoryRadioButton onClick={() => setCategoryIdx(idx)}>
+                        <category.icon />
+                      </CategoryRadioButton>
+                    )}
+                  </ButtonContainer>
+                  <CategoryLabel>{category.name}</CategoryLabel>
+                </CategoryCard>
+              ))}
+            </CategoryContainer>
+            {categoryIdx > -1 && productName && description && productImage?.imagePreviewUrl ? (
+              <NextButton onClick={() => setNextOn(true)} style={{ backgroundColor: '#5566FF' }}>
+                다음
+              </NextButton>
+            ) : (
+              <NextButton>다음</NextButton>
+            )}
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 
