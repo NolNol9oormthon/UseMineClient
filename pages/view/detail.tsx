@@ -1,4 +1,3 @@
-import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
@@ -16,7 +15,7 @@ import { ItemProps } from '.';
 const Container = styled.div`
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100); ;
 `;
 
 const ImageWrapper = styled.div`
@@ -174,14 +173,13 @@ const Detail = () => {
 
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate, mutateAsync } = useMutation(
+  const { mutate } = useMutation(
     ({ itemId, userId, state }: { itemId: number; userId: number; state?: string }) => {
-      if (state)
-        return patchItem(itemId, userId, state)
+      if (state) return patchItem(itemId, userId, state);
       return deleteItem(itemId, userId);
     },
     {
-      onSuccess: (variables, context) => {
+      onSuccess: () => {
         return queryClient.invalidateQueries(['myData']);
       },
     },
@@ -189,7 +187,7 @@ const Detail = () => {
 
   return (
     <>
-      <Seo title="Detail" />
+      <Seo title={data?.itemName} />
       <Container>
         {reqOn ? (
           <Modal
@@ -197,6 +195,7 @@ const Detail = () => {
             visible={reqOn}
             maskClosable={true}
             onClose={closeModal}
+            isOrange={true}
             text="오픈 채팅방 이동"
             subText="소통을 위한 카카오톡 오픈채팅방으로 바로 이동합니다"
             buttonText="이동하기"

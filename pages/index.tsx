@@ -3,10 +3,11 @@ import { NextPage } from 'next';
 import styled from 'styled-components';
 
 import JejuLogo from '../assets/icons/jeju-logo.svg';
+import Seo from '../src/components/Seo';
 
 const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   height: 100%;
   font-family: NanumSquare Neo variable;
   font-size: 30px;
@@ -65,12 +66,15 @@ const Home: NextPage = () => {
   };
 
   return (
-    <Container>
-      <ContentBox>
-        <JejuLogo />
-      </ContentBox>
-      <LoginButton onClick={handleLogin}>카카오로 시작하기</LoginButton>
-    </Container>
+    <>
+      <Seo title="Home" />
+      <Container>
+        <ContentBox>
+          <JejuLogo />
+        </ContentBox>
+        <LoginButton onClick={handleLogin}>카카오로 시작하기</LoginButton>
+      </Container>
+    </>
   );
 };
 

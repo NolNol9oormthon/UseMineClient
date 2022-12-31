@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -131,7 +131,7 @@ const ItemList = styled.div`
   gap: 16px;
   padding: 108px 0 0 0;
   height: 100%;
-  max-height: calc(100vh - 56px);
+  max-height: calc(var(--vh, 1vh) * 100 - 56px);
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
@@ -153,7 +153,7 @@ export interface ItemProps {
 const View: NextPage = () => {
   const [clickedCategoryChip, setClickedCategoryChip] = useState<string>('all');
 
-  const { data, fetchNextPage, hasNextPage, status } = useInfiniteQuery(
+  const { data, fetchNextPage, status } = useInfiniteQuery(
     ['infiniteDatas', clickedCategoryChip],
     ({ pageParam = 0 }) => getAllData(clickedCategoryChip, pageParam),
     {

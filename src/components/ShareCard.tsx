@@ -1,12 +1,11 @@
-// import { useRecoilState } from 'recoil';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import styled from 'styled-components';
 
-import { MyDataProps } from '../../pages/mypage';
 import { ItemProps } from '../../pages/view';
 import { deleteItem, patchItem } from '../apis';
-import { myDataState } from '../atom';
 import { ItemState } from './Item';
+import Modal from './Modal';
 
 const Container = styled.div<{ isAvailable: boolean; isReserved: boolean; isComplete: boolean }>`
   width: 100%;
@@ -122,19 +121,26 @@ const ShareCard = ({
   state,
   itemId,
 }: Pick<ItemProps, 'imageUrl' | 'itemName' | 'state' | 'itemId'>) => {
-  // const [data, setData] = useRecoilState<MyDataProps>(myDataState);
   const queryClient = useQueryClient();
   const isAvailable = state === ItemState.AVAILABLE;
   const isReserved = state === ItemState.RESERVED;
   const isComplete = state === ItemState.COMPLETE;
+  const [reqOn, setReqOn] = useState(false);
+  const [buttonType, setButtonType] = useState<string>();
 
-  const { data, isLoading, mutate, mutateAsync } = useMutation(
+  const ButtonTypes = {
+    CancelButton: 'CancelButton',
+    CompleteButton: 'CompleteButton',
+    LongCancelButton: 'LongCancelButton',
+  };
+
+  const { mutate } = useMutation(
     ({ itemId, userId, state }: { itemId: number; userId: number; state?: string }) => {
       if (state) return patchItem(itemId, userId, state);
       return deleteItem(itemId, userId);
     },
     {
-      onSuccess: (data, variables, context) => {
+      onSuccess: () => {
         return queryClient.invalidateQueries(['myData']);
       },
     },
@@ -151,11 +157,40 @@ const ShareCard = ({
     mutate({ itemId, userId: Number(localStorage.getItem('userId')), state: 'AVAILABLE' });
   };
 
+  const closeModal = () => {
+    setReqOn(false);
+  };
+
   return (
     <Container isAvailable={isAvailable} isReserved={isReserved} isComplete={isComplete}>
+      {reqOn ? (
+        <Modal
+          className="req_modal"
+          visible={reqOn}
+          maskClosable={true}
+          onClose={closeModal}
+          isOrange={isAvailable}
+          text={buttonType === ButtonTypes.CompleteButton ? '나눔 완료' : '나눔 취소'}
+          subText={
+            buttonType === ButtonTypes.CompleteButton
+              ? '나눔을 완료하시겠습니까?'
+              : buttonType === ButtonTypes.CancelButton
+              ? '예정된 나눔을 취소하고 새로운 나눔을 기다리시겠습니까?'
+              : '나눔을 취소하시겠습니까?'
+          }
+          buttonText={buttonType === ButtonTypes.CompleteButton ? '완료하기' : '취소하기'}
+          buttonOnClick={() => {
+            if (buttonType === ButtonTypes.CompleteButton) handleComplete();
+            if (buttonType === ButtonTypes.CancelButton) handleReopen();
+            if (buttonType === ButtonTypes.LongCancelButton) handleDelete();
+          }}
+        />
+      ) : (
+        <></>
+      )}
       <ItemSection>
         <ImageContainer>
-          <Image src={imageUrl} />
+          <Image src={imageUrl} alt={itemName} />
         </ImageContainer>
         <TextContainer>
           {isAvailable ? <StateChip state={ItemState.AVAILABLE}>나눔 가능</StateChip> : null}
@@ -170,14 +205,16 @@ const ShareCard = ({
             <>
               <CancelButton
                 onClick={() => {
-                  handleReopen();
+                  setButtonType(ButtonTypes.CancelButton);
+                  setReqOn(true);
                 }}
               >
                 나눔 취소
               </CancelButton>
               <CompleteButton
                 onClick={() => {
-                  handleComplete();
+                  setButtonType(ButtonTypes.CompleteButton);
+                  setReqOn(true);
                 }}
               >
                 나눔 완료
@@ -187,7 +224,8 @@ const ShareCard = ({
           {isAvailable ? (
             <LongCancelButton
               onClick={() => {
-                handleDelete();
+                setButtonType(ButtonTypes.LongCancelButton);
+                setReqOn(true);
               }}
             >
               나눔 취소
